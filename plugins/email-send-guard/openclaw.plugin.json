@@ -1,0 +1,13 @@
+{
+  "id": "email-send-guard",
+  "name": "Email Send Guard",
+  "description": "Deterministic twin of callback-dispatch/calendar-write-guard for the email-send boundary. before_dispatch: a bare '✅' (RULES.md's unconditional email-send trigger, previously enforced only by the model reading a free-text message correctly) always runs send_pending.py --latest itself, before the agent turn. before_tool_call: blocks ad-hoc `gog gmail send/reply/autoreply` in the exec tool (BANNED per RULES.md — a real 2026-09-10 incident used one, bypassed the confirmation gate, and falsely reported success), pointing at the sanctioned draft+✅ flow instead.",
+  "activation": {
+    "onStartup": true,
+    "onCapabilities": ["hook"]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false
+  }
+}

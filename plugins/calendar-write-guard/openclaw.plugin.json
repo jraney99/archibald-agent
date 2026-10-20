@@ -1,0 +1,13 @@
+{
+  "id": "calendar-write-guard",
+  "name": "Calendar Write Guard",
+  "description": "Write-side twin of calendar-read-guard. In the exec tool: blocks `gog calendar create/update` calls that use invented flags (--title/--start/--end/--date/--format) or that create an event without both --start-timezone and --end-timezone, and requires approval before re-creating an event already created or deleted earlier in the same session (the delete->recreate display-artifact spiral). Cron/job runs are left alone.",
+  "activation": {
+    "onStartup": true,
+    "onCapabilities": ["hook"]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false
+  }
+}

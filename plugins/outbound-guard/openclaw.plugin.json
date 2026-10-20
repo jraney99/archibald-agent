@@ -1,0 +1,13 @@
+{
+  "id": "outbound-guard",
+  "name": "Outbound Guard",
+  "description": "Blocks the routes a prompt-injected Archibald could use to send the user's data out (gog forward/share/send aliases, Gmail forwarding settings, unapproved network hosts, data-carrying URLs, live secrets in tool calls) and asks before inviting new calendar guests.",
+  "activation": {
+    "onStartup": true,
+    "onCapabilities": ["hook"]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false
+  }
+}

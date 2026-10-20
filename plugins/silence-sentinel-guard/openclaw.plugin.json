@@ -1,0 +1,13 @@
+{
+  "id": "silence-sentinel-guard",
+  "name": "Silence Sentinel Guard",
+  "description": "before_agent_finalize: a reply that is a silence sentinel carrying anything else — a 🎩, or the token alone under other output — is sent back for one more pass. The gateway matches NO_REPLY and HEARTBEAT_OK exactly, so anything attached breaks the match and the whole reply, logs included, is delivered to the user. Built 2026-10-09 after he received a wall of the email daemon's [Cal] log lines ending 'NO_REPLY 🎩'.",
+  "activation": {
+    "onStartup": true,
+    "onCapabilities": ["hook"]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "prompt-forgery-guard",
+  "name": "Prompt Forgery Guard",
+  "description": "before_agent_finalize: a reply that hand-writes a script-owned Telegram prompt — a 💳 card header with a → verdict line, or an occasion/receipt question — is sent back for one more model pass. Built 2026-09-26, after the agent typed three fake '→ Dining — what was the occasion?' prompts for a charge the ledger had recorded as Groceries: no script sent them, the category was never Dining, and a forged prompt is indistinguishable from a real one. The outbound twin of callback-dispatch.",
+  "activation": {
+    "onStartup": true,
+    "onCapabilities": ["hook"]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false
+  }
+}

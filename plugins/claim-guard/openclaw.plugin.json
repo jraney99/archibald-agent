@@ -1,0 +1,13 @@
+{
+  "id": "claim-guard",
+  "name": "Claim Guard",
+  "description": "before_agent_finalize: a reply that claims a save, a schedule, a promise to remember, or a logged meal count — in a turn where no state-capable tool call succeeded — is sent back for one more model pass with the instruction to run the owning script or say plainly that nothing was saved. Built after the 2026-09-20 accuracy audit: counts from scripts were right 10/10, counts and 'Logged' claims made with zero tool calls were wrong every time.",
+  "activation": {
+    "onStartup": true,
+    "onCapabilities": ["hook"]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false
+  }
+}

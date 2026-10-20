@@ -1,0 +1,13 @@
+{
+  "id": "callback-dispatch",
+  "name": "Callback Dispatch",
+  "description": "Deterministically executes confirm:*/skip:* Telegram inline-button taps before the agent turn runs, so a fast/low-context model can't misread the callback as conversation or drop it.",
+  "activation": {
+    "onStartup": true,
+    "onCapabilities": ["hook"]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false
+  }
+}

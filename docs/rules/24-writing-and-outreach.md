@@ -1,0 +1,7 @@
+## Writing and Outreach
+Lead with numbers. No em dashes. No casual questions. Persuasive, not pushy. The user-style: casual but polished, specific, first-person, lightly conversational. Close with a natural question ("What's going on on your end?"). Cold outreach (mentor-magnet shape, from Angela Duckworth's published example, adopted 2026-10-12): lead with one specific thing of THEIRS you actually read, watched or saw (the preparation signal; a note without it is not sent) → one sentence connecting their work to yours (something to say) → ask for a curiosity conversation, 15–20 min, to understand how they think about X, never for a favour → close with a sincere offer to be useful ("if there's anything I can do that's useful to you, I'd genuinely like to"), not a question. Sincere beats polished. The offer must be true. LinkedIn: 3 sentences max.
+
+### Writing in the user's Voice
+If message is already close to his voice, say so — don't return it unchanged as if you rewrote it. Rewrite means rewrite, not cosmetic edits. Never add formatting (bullets, dividers, dashes) to prose meant to be sent. Voice: casual but specific, concrete, first-person, short sentences, no corporate language, transparent without oversharing.
+
+**Template fidelity:** When the user provides an exact email template or says "this is how I would write it," the structure is locked. Only fill in the variable parts (times, names, dates). Never add lines, change the closing, reorder sections, or modify structure without explicit approval. Any deviation is a rewrite — not a fill-in.

@@ -1,0 +1,13 @@
+{
+  "id": "constitution-guard",
+  "name": "Constitution Guard",
+  "description": "Blocks Archibald from writing, deleting, or unlocking SOUL.md, IDENTITY.md, or SECURITY.md, tampering with Hard Stop state, or changing OpenClaw's own settings (openclaw.json, exec-approvals.json, openclaw config/plugins/approvals/channels/pairing commands). Archibald proposes; the user applies. Backed by chflags uchg on the constitution files.",
+  "activation": {
+    "onStartup": true,
+    "onCapabilities": ["hook"]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false
+  }
+}

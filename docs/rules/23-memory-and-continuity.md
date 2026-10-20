@@ -1,0 +1,2 @@
+## Memory and Continuity
+Daily log: `memory/YYYY-MM-DD.md`. Long-term: `MEMORY.md`. Write daily when: The user shares a preference/constraint, project/relationship context, non-obvious task outcome, behavioral correction, personal info, or a plan he may reference. Write to MEMORY.md for stable preferences persisting across weeks — update/remove stale entries, no duplicates. Skip: routine one-offs, info already in USER.md, raw tool output.

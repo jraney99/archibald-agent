@@ -1,0 +1,13 @@
+{
+  "id": "trading-guard",
+  "name": "Trading Guard",
+  "description": "Every brokerage order waits for the user's Allow Once tap in Telegram (deny on timeout, never from cron); blocks any other route to the brokerage's trading service or its login token.",
+  "activation": {
+    "onStartup": true,
+    "onCapabilities": ["hook"]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "memory-health-guard",
+  "name": "Memory Health Guard",
+  "description": "Blocks meal/supplement/hydration/medication/recovery-movement reports from being written into workspace/MEMORY.md's Health section instead of the real tracking scripts \u2014 that section isn't read by the Dr. Example weekly journal. Fixed 2026-09-13 after it happened twice the same day. 2026-09-18: also blocks the agent from hand-editing the health log files themselves (food/supplement/breakfast/readiness/restrictions/movement/premeal/feeling/notes/hydration/medication logs) via edit, write, apply_patch, or an exec write \u2014 Dr. Example's report is rendered from them; the sanctioned route is dr-physician/scripts/log_day.py.",
+  "activation": {
+    "onStartup": true,
+    "onCapabilities": [
+      "hook"
+    ]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false
+  }
+}

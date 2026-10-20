@@ -1,0 +1,428 @@
+# Engine data — controlled vocabularies (DESIGN.md "Controlled vocabularies").
+# Reusable across any installation of this skill. Do not put personal data here.
+
+category_groups:
+  clothing: [shirt, t-shirt, polo, sweater, vest, jacket, coat, blazer, suit, pants, jeans, shorts, activewear]
+  footwear: [sneakers, boots, loafers, dress_shoes, athletic_shoes, specialty_footwear]
+  accessories: [watch, sunglasses, belt, wallet, bag, jewelry, hat, tie, scarf]
+  # Foundation garments — tracked for inventory, replacement, laundry and
+  # spend, but deliberately absent from `outfit_slots` below: the Outfit
+  # Engine, Travel Packing and Shopping Advisor's identity/colour reasoning
+  # never operate on them (a stylist doesn't compose around your sock drawer).
+  # closet_report.py also skips this group in duplicate/redundancy detection —
+  # owning many identical pairs of socks is correct, not a purchase mistake.
+  basics: [socks, underwear, undershirt, sleepwear]
+
+occasion_tiers:
+  - casual
+  - smart-casual
+  - business-casual
+  - business-formal
+  - black-tie
+  - athletic
+  - loungewear
+
+# Outfit Engine (DESIGN.md Module 5): which categories fill which slot of an
+# outfit. A complete outfit needs one of full_body OR (base_top + bottoms),
+# plus footwear. layering_top, outerwear, and accessories are optional
+# add-ons — and base_top + layering_top can BOTH be worn together (a shirt
+# under a sweater), they are not alternatives to each other the way two
+# base_top items would be. `vest` sits in the outerwear slot: an optional
+# layer over a top, never a substitute for a top on its own.
+outfit_slots:
+  base_top: [shirt, t-shirt, polo]
+  layering_top: [sweater]
+  bottoms: [pants, jeans, shorts]
+  outerwear: [vest, jacket, coat, blazer]
+  full_body: [suit]
+  athletic_wear: [activewear]
+  footwear: [sneakers, boots, loafers, dress_shoes, athletic_shoes, specialty_footwear]
+  accessories: [watch, sunglasses, belt, wallet, bag, jewelry, hat, tie, scarf]
+
+formality_scale:
+  1: loungewear
+  2: casual
+  3: smart-casual / business-casual
+  4: business-formal
+  5: black-tie
+
+# Occasion -> target formality level (see formality_scale). The Outfit Engine
+# matches items within +/-1 of this level, not an exact-only match.
+occasion_formality:
+  loungewear: 1
+  athletic: 1
+  casual: 2
+  smart-casual: 3
+  business-casual: 3
+  business-formal: 4
+  black-tie: 5
+
+# Calendar language is normalized to the stable occasion tiers above. The
+# phrase remains attached to the proposal so an inferred mapping is visible.
+occasion_aliases:
+  cocktail: smart-casual
+  wedding: business-formal
+  rehearsal dinner: smart-casual
+  funeral: business-formal
+  memorial: business-formal
+  client dinner: business-casual
+  date night: smart-casual
+  country club: smart-casual
+  golf: smart-casual
+  black tie: black-tie
+  formal attire: business-formal
+  business formal: business-formal
+  business casual: business-casual
+  smart casual: smart-casual
+  casual attire: casual
+
+# Required structure is stricter than the +/-1 candidate filter. `one_of`
+# means at least one alternative is required; `all` means every slot is. An
+# alternative is a slot, or a list of slots that must all be filled together
+# (separates need a top AND bottoms; an activewear set covers both alone).
+occasion_requirements:
+  casual: {all: [base_top, bottoms, footwear]}
+  smart-casual: {all: [base_top, bottoms, footwear]}
+  business-casual: {all: [base_top, bottoms, footwear]}
+  business-formal: {all: [full_body, base_top, footwear]}
+  black-tie: {all: [full_body, base_top, footwear], advisory: "Verify that the suit and accessories are specifically black-tie appropriate."}
+  athletic: {one_of: [athletic_wear, [base_top, bottoms]], all: [footwear]}
+  loungewear: {one_of: [athletic_wear, base_top]}
+
+activities:
+  - general
+  - golf-round
+  - driving-range
+  - golf-simulator
+  - golf-clubhouse
+  - golf-spectator
+  - gym
+  - running
+  - dining
+  - travel
+  - work
+  - formal-event
+
+# Slot/category rules apply before ranking. They prevent a broadly similar
+# formality score from putting golf shoes at dinner or street shoes in a round.
+activity_slot_categories:
+  golf-round:
+    base_top: [polo]
+    bottoms: [pants, shorts]
+    footwear: [specialty_footwear]
+  driving-range:
+    base_top: [polo, t-shirt]
+    bottoms: [pants, shorts]
+    footwear: [specialty_footwear, athletic_shoes, sneakers]
+  golf-simulator:
+    base_top: [polo, t-shirt, shirt]
+    bottoms: [pants, shorts, jeans]
+    footwear: [athletic_shoes, sneakers]
+  golf-clubhouse:
+    base_top: [polo, shirt]
+    bottoms: [pants, shorts]
+    footwear: [loafers, dress_shoes, sneakers]
+  golf-spectator:
+    base_top: [polo, shirt, t-shirt]
+    bottoms: [pants, shorts, jeans]
+    footwear: [athletic_shoes, sneakers, loafers]
+  gym:
+    athletic_wear: [activewear]
+    footwear: [athletic_shoes]
+  running:
+    athletic_wear: [activewear]
+    footwear: [athletic_shoes]
+
+# Sleeve length of a top (optional closet field `sleeve`). Lets heat rules
+# filter on what a garment physically is instead of guessing from its category.
+sleeve_lengths: [short, long]
+
+# Activities where the wearer is exerting themselves; comfort rules treat
+# these as never "dressy", whatever occasion tier was passed.
+physical_activities: [golf-round, driving-range, golf-simulator, gym, running]
+
+# Indoor, climate-controlled activities: an item's calendar season says nothing
+# about whether it suits the room, so the season filter does not apply.
+climate_controlled_activities: [golf-simulator, gym]
+
+activity_advisories:
+  golf-round: "Verify the specific course dress code; default to a collared polo and no denim."
+  driving-range: "Golf shoes are optional unless the facility or turf conditions call for them."
+  golf-simulator: "Golf shoes are normally unnecessary; favor clean non-marking sneakers or athletic shoes."
+  golf-clubhouse: "Treat this as club-appropriate smart casual; change out of golf shoes unless arriving directly from play and the venue permits them."
+  golf-spectator: "Prioritize walking comfort and weather protection; playing equipment is unnecessary."
+
+activity_aliases:
+  driving range: driving-range
+  golf range: driving-range
+  golf simulator: golf-simulator
+  simulator golf: golf-simulator
+  clubhouse dinner: golf-clubhouse
+  clubhouse lunch: golf-clubhouse
+  golf tournament spectator: golf-spectator
+  watch golf: golf-spectator
+  tee time: golf-round
+  golf round: golf-round
+  golf: golf-round
+  gym: gym
+  workout: gym
+  dinner: dining
+  date night: dining
+  restaurant: dining
+  run: running
+
+# ---- Event triage (scripts/event_triage.py): which calendar events deserve an outfit.
+# Silent by default: an event is proposed for only when it positively matches a kind
+# below. Phrases match whole words, case-insensitively. Personal data (who is a
+# friend, own addresses) lives in profile/people.json, never here.
+remote_meeting_markers: [zoom, google meet, google meets, meet.google, teams, webex, phone, phone call, call, webinar, telehealth, facetime, virtual]
+home_markers: [home]
+# Things that happen at a place but are never an occasion.
+never_propose_phrases: [workout, gym, lift, swim, run, yoga, pilates, stretch, hike, coaching, doctor, dentist, physical, appointment, facial, massage, haircut, barber, cleaning, leave for, pickup, pick up, drop off, oil change, errand, laundry, grocery, groceries, check-in, check in]
+workout_activities: [golf-simulator, driving-range, gym, running]
+# 2026-10-13: the bare alias "golf" used to mean a real round, so a TOUR of an indoor
+# simulator club got a smart-casual board ("not a real round of golf" - the user). A round is
+# now a round only when nothing says otherwise; these two lists say otherwise.
+indoor_golf_markers: [indoor, simulator, sim, bay, lounge, topgolf, five iron, x-golf, trackman, puttery, drive shack]
+visit_phrases: [tour, visit, walkthrough, walk through, open house, trial, demo, consultation, showing, membership]
+hosted_event_phrases: [ticket, party, gala, wedding, reception, mixer, conference, summit, happy hour, fundraiser, ceremony, graduation, banquet, country club, networking, meetup, launch, cocktail, cocktails, rehearsal dinner, funeral, memorial, baptism, shower, concert, tournament, holiday party, open house]
+dining_phrases: [breakfast, brunch, lunch, dinner, drinks, coffee, reservation, supper, tasting]
+explicit_attire_phrases: [black tie, formal attire, business formal, business casual, smart casual, casual attire, cocktail attire, dress code]
+
+# Airport code -> city, for a trip's destination forecast (packing_list.py). Generic data.
+airport_cities:
+  DAL: Dallas, TX
+  DFW: Dallas, TX
+  LAX: Los Angeles, CA
+  BUR: Burbank, CA
+  LGB: Long Beach, CA
+  SNA: Santa Ana, CA
+  SAN: San Diego, CA
+  SFO: San Francisco, CA
+  OAK: Oakland, CA
+  SJC: San Jose, CA
+  LGA: New York, NY
+  JFK: New York, NY
+  EWR: Newark, NJ
+  BOS: Boston, MA
+  PHL: Philadelphia, PA
+  DCA: Washington, DC
+  IAD: Washington, DC
+  BWI: Baltimore, MD
+  ORD: Chicago, IL
+  MDW: Chicago, IL
+  DEN: Denver, CO
+  SLC: Salt Lake City, UT
+  PHX: Phoenix, AZ
+  LAS: Las Vegas, NV
+  SEA: Seattle, WA
+  PDX: Portland, OR
+  AUS: Austin, TX
+  SAT: San Antonio, TX
+  HOU: Houston, TX
+  IAH: Houston, TX
+  MSY: New Orleans, LA
+  ATL: Atlanta, GA
+  BNA: Nashville, TN
+  CLT: Charlotte, NC
+  RDU: Raleigh, NC
+  MIA: Miami, FL
+  FLL: Fort Lauderdale, FL
+  MCO: Orlando, FL
+  TPA: Tampa, FL
+  STL: St. Louis, MO
+  MCI: Kansas City, MO
+  MSP: Minneapolis, MN
+  DTW: Detroit, MI
+  OKC: Oklahoma City, OK
+  TUL: Tulsa, OK
+  ABQ: Albuquerque, NM
+  HNL: Honolulu, HI
+  CUN: Cancun, Mexico
+  SJD: San Jose del Cabo, Mexico
+
+seasons:
+  - spring
+  - summer
+  - fall
+  - winter
+  - all-season
+
+# Why a piece left the closet. A fixed list, not free text: 2026-10-13 the retirement notes
+# were half unusable — 14 of 27 said only "didn't fit" or nothing, and seven entries for one
+# brand were ONE sizing mistake written down seven times, which would have taught the skill to
+# stop buying a brand he likes. The user chose to start fresh, so the record starts here,
+# structured.
+retirement_reasons:
+  - doesnt-fit          # the cut or size was wrong — a lesson about that brand, not about him
+  - worn-out            # it did its job and wore through
+  - redundant           # a duplicate of something better he kept
+  - off-palette         # the colour never worked
+  - never-wore          # it fit and he still never reached for it — the strongest taste signal
+  - style-changed       # he has moved on from it
+  - replaced            # a better version of the same thing took its place
+
+lifecycle_states:
+  - active              # available to wear and recommend
+  - dirty               # worn, needs cleaning before it's wearable again
+  - at-cleaner-or-repair
+  - packed-away         # seasonal storage
+  - lent-out
+  - retired             # no longer part of the active wardrobe, kept for history/analytics
+
+condition_ratings:
+  - excellent
+  - good
+  - worn
+  - needs-repair
+
+intake_sources:
+  - photo
+  - receipt
+  - manual
+
+# Body & Fit Profile (DESIGN.md Module 2) — fit preference vocabularies.
+fit_preference_scales:
+  tops: [slim, athletic, classic, relaxed]
+  outerwear: [structured, relaxed, cropped, traditional]
+  rise: [low, mid, high]
+  leg_opening: [skinny, slim, straight, wide]
+  length: [cropped, ankle, full-length]
+  break: [no-break, slight-break, full-break]
+
+unit_systems:
+  - imperial
+  - metric
+
+# Shopping Advisor (DESIGN.md Module 6) — purchase-decision log vocabularies.
+purchase_recommendations:
+  - buy
+  - skip
+  - already-own
+
+purchase_outcomes:
+  - unknown
+  - bought
+  - skipped
+
+# Purchase Lessons / regret memory (DESIGN.md Module 6) — what kind of
+# mistake a past purchase turned out to be, so future recommendations can
+# actually avoid repeating it ("I'd avoid slim chinos — you found that cut
+# uncomfortable last time") instead of relying on the agent to remember a
+# prose note verbatim.
+purchase_lesson_types:
+  - fit
+  - brand
+  - color
+  - quality
+  - lifestyle
+  - other
+
+# Care & Maintenance (DESIGN.md Module 8) — watch service intervals depend on
+# movement type, not just "watch" as a category (see care_heuristics.yaml).
+movement_types:
+  - quartz
+  - mechanical
+  - automatic
+
+# Personal Shopper watchlist (DESIGN.md Module 6) — proactive scanning.
+watchlist_sources:
+  - user-requested
+  - gap-detected
+
+watchlist_statuses:
+  - active
+  - fulfilled
+  - cancelled
+
+# Wardrobe Analytics (DESIGN.md Module 7) — a self-reported usage baseline,
+# optionally captured once at intake for a pre-existing item (e.g. during a
+# bulk photo-catalog pass of an already-owned wardrobe). wear_count only
+# starts counting from the moment an item enters the closet, so without this
+# an established item would misreport as "never worn" for months just
+# because tracking hasn't caught up yet — this is a hypothesis about past
+# usage the user states directly, not something the engine infers.
+usage_frequency_estimates:
+  - regularly
+  - occasionally
+  - rarely
+  - basically-never
+
+# Digital Closet (DESIGN.md Module 3) — what actually happened to a retired
+# item. Only meaningful once lifecycle_state is "retired"; without it,
+# "retired" is a dead end with no record of the outcome, even though what
+# happened (sold, donated, discarded) is directly relevant to the
+# stewardship principle (closet_value.py's recouped-value reporting reads
+# this).
+disposition_types:
+  - donated
+  - sold
+  - given-away
+  - discarded
+
+# Outfit Engine (DESIGN.md Module 5) — a soft compositional tiebreaker, not a
+# controlled vocabulary or a filter: colors_match() in closet_report.py
+# already handles duplicate/near-duplicate detection on an item's own free-
+# text `color` field, which stays free text. This just groups common values
+# so the agent can reason about harmony when composing an outfit from real
+# candidates (neutrals pair with almost anything; a single non-neutral
+# "accent" color usually reads better than two competing saturated colors).
+color_families:
+  neutral: [white, black, navy, gray, grey, beige, tan, cream, khaki, brown]
+  warm: [red, orange, yellow, olive, rust, burgundy, mustard]
+  cool: [blue, green, purple, teal]
+
+# Color Analysis (DESIGN.md Module 11) — engine vocabularies for a
+# professional seasonal color analysis. The analysis itself (which season,
+# which palette) is personal data and lives in profile/color_analysis.yaml;
+# these are the reusable enums it's validated against.
+
+# The 12-sub-season system most consultants use. A 4-season analysis still
+# maps onto this (e.g. plain "Autumn" -> "True Autumn").
+color_seasons:
+  - Bright Spring
+  - True Spring
+  - Light Spring
+  - Light Summer
+  - True Summer
+  - Soft Summer
+  - Soft Autumn
+  - True Autumn
+  - Deep Autumn
+  - Deep Winter
+  - True Winter
+  - Bright Winter
+
+undertones:
+  - warm
+  - cool
+  - neutral
+  - olive
+
+# Contrast/intensity the analysis calls for — drives how boldly the Outfit
+# Engine combines colors (a Soft season wants low-contrast, tonal pairings; a
+# Bright/Deep season can carry stark light/dark).
+contrast_levels:
+  - low
+  - medium
+  - high
+
+# color_match.py's verdict for a candidate color checked against the palette.
+palette_verdicts:
+  - in-palette
+  - borderline
+  - reject
+
+# Palette hue buckets — how profile/color_analysis.yaml groups its swatches,
+# and what color_match.py's --list-family accepts. Distinct from
+# color_families above (that's a warm/cool/neutral temperature grouping for
+# the generic tiebreaker used when NO color analysis is on file).
+palette_families:
+  - neutrals
+  - reds
+  - pinks
+  - yellows
+  - greens
+  - blue-greens
+  - blues
+  - purples

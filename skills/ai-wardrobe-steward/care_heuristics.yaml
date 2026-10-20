@@ -1,0 +1,80 @@
+# Engine data (DESIGN.md Module 8) — default care intervals, wear-based not
+# calendar-based, per the design principle "don't rely only on time." The one
+# deliberate exception is watches: mechanical movements degrade from
+# lubricant breakdown over time regardless of use, so interval_days is
+# correct there and interval_wears would be wrong.
+#
+# Priority when checking an item (see scripts/care.py get_rule):
+#   - its own care_override always wins.
+#   - for a watch with a known movement_type, watch_movement_types wins over
+#     the generic by_category watch rule — a quartz watch needs a battery
+#     change on a totally different cadence than a mechanical/automatic
+#     movement needs servicing, and lumping them into one flat interval
+#     (DESIGN.md explicitly names "by movement type" as the example) was
+#     wrong for whichever type wasn't average.
+#   - for bag/belt/wallet/boots/loafers/dress_shoes/jacket/coat
+#     (MATERIAL_FIRST_CATEGORIES in care.py) — categories whose category
+#     default doesn't already imply a safe universal action, unlike
+#     blazer/suit (dry clean is fine regardless of exact fabric) — a
+#     material_overrides match wins over the category default.
+#   - otherwise, by_category wins over material_overrides — a cotton blazer
+#     is still a structured garment, not a t-shirt, even though they share a
+#     fabric (category encodes more real-world context than fabric alone).
+#   - material_overrides is a fallback for any OTHER category with no
+#     by_category entry, EXCEPT lightweight accessories (sunglasses, jewelry,
+#     hat, tie, scarf — NO_MATERIAL_FALLBACK in care.py), which never inherit
+#     a generic material rule (it's calibrated for garment-weight items like
+#     suits, not a wool beanie) and stay rule-less unless the user sets an
+#     explicit care_override.
+#
+# `drying` is separate from `action` on purpose — how something gets cleaned
+# and how it gets dried afterward are different failure modes (a garment can
+# survive the wrong wash and still be ruined by a hot dryer: wool felts and
+# shrinks, structured pieces lose shape, synthetics/elastic degrade, denim
+# fades and wears out faster). Surface both, not just the cleaning action.
+
+by_category:
+  shirt: {action: "wash", interval_wears: 1, drying: "tumble dry low or hang — high heat shrinks and breaks down fibers over time"}
+  t-shirt: {action: "wash", interval_wears: 1, drying: "tumble dry low or hang"}
+  polo: {action: "wash", interval_wears: 2, drying: "hang dry preferred — tumble low if needed, avoid high heat which distorts the collar"}
+  sweater: {action: "hand wash or dry clean (check material)", interval_wears: 4, drying: "lay flat to dry — hanging stretches it out of shape, machine drying can shrink/felt wool or wool-blend knits"}
+  vest: {action: "machine wash cold or spot clean (check tag)", interval_wears: 6, drying: "hang dry — air dry quilted/insulated panels, never high heat which flattens fill and degrades elastic"}
+  jacket: {action: "spot clean / air out", interval_wears: 8, drying: "air dry — most jackets aren't machine washable at all; check the care label before assuming otherwise"}
+  coat: {action: "spot clean / air out", interval_wears: 10, drying: "air dry — do not machine dry"}
+  blazer: {action: "dry clean", interval_wears: 5, drying: "dry clean only — do not wash or machine dry at home, it will lose its structure"}
+  suit: {action: "dry clean", interval_wears: 5, drying: "dry clean only — do not wash or machine dry at home, it will lose its structure"}
+  pants: {action: "wash", interval_wears: 3, drying: "hang dry or tumble low depending on fabric — check material"}
+  jeans: {action: "wash sparingly", interval_wears: 5, drying: "hang dry — repeated machine drying fades color and wears down denim fibers faster"}
+  shorts: {action: "wash", interval_wears: 3, drying: "tumble dry low or hang"}
+  activewear: {action: "wash", interval_wears: 1, drying: "hang dry — heat degrades technical fabrics and elastic over repeated cycles"}
+  sneakers: {action: "clean / air out", interval_wears: 10, drying: "air dry only — never machine dry, heat warps soles and weakens adhesives"}
+  boots: {action: "condition leather / weatherproof", interval_wears: 15, drying: "air dry away from direct heat — never machine dry leather"}
+  loafers: {action: "condition leather", interval_wears: 15, drying: "air dry away from direct heat — never machine dry leather"}
+  dress_shoes: {action: "condition leather, polish", interval_wears: 12, drying: "air dry away from direct heat — never machine dry leather"}
+  athletic_shoes: {action: "clean / air out", interval_wears: 15, drying: "air dry only — never machine dry"}
+  specialty_footwear: {action: "check manufacturer care instructions", interval_wears: 15, drying: "check manufacturer instructions"}
+  belt: {action: "condition leather", interval_wears: 25, drying: "air dry away from direct heat if it gets wet — never machine dry leather"}
+  wallet: {action: "condition leather", interval_wears: 30, drying: "air dry away from direct heat if it gets wet — never machine dry leather"}
+  bag: {action: "condition leather / spot clean", interval_wears: 20, drying: "air dry away from direct heat — never machine dry"}
+  watch: {action: "movement service check", interval_days: 730, drying: null}
+  socks: {action: "wash", interval_wears: 1, drying: "tumble dry low or hang — high heat breaks down the elastic over time"}
+  underwear: {action: "wash", interval_wears: 1, drying: "tumble dry low or hang — high heat breaks down the elastic over time"}
+  undershirt: {action: "wash", interval_wears: 1, drying: "tumble dry low or hang"}
+  sleepwear: {action: "wash", interval_wears: 3, drying: "tumble dry low or hang"}
+
+# Only used when the item has a movement_type set (see vocab.yaml
+# movement_types) — falls back to the generic by_category watch rule above
+# when movement_type is unset, so this is opt-in enrichment, not required.
+watch_movement_types:
+  quartz: {action: "battery change", interval_days: 545, drying: null}
+  mechanical: {action: "movement service (clean, oil, adjust)", interval_days: 1825, drying: null}
+  automatic: {action: "movement service (clean, oil, adjust)", interval_days: 1825, drying: null}
+
+material_overrides:
+  wool: {action: "dry clean", interval_wears: 5, drying: "lay flat to dry, never tumble dry — heat felts and shrinks wool"}
+  leather: {action: "condition", interval_wears: 15, drying: "air dry away from direct heat — never machine dry"}
+  denim: {action: "wash sparingly — fades/wears out faster than you'd think if over-washed", interval_wears: 6, drying: "hang dry — tumble drying fades color and wears down fibers faster"}
+  cotton: {action: "wash", interval_wears: 2, drying: "tumble dry low or hang — high heat causes shrinkage over repeated cycles"}
+  canvas: {action: "spot clean, machine wash if tag allows", interval_wears: 10, drying: "air dry — check tag before tumble drying"}
+  nylon: {action: "spot clean / wipe down", interval_wears: 15, drying: "air dry"}
+  suede: {action: "brush clean, suede protector spray — avoid water", interval_wears: 12, drying: "air dry away from heat, brush the nap back into place once dry"}

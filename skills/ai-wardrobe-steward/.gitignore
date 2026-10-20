@@ -1,0 +1,8 @@
+# Wardrobe photos are personal, large, and don't need version history —
+# keep them as local files only, never in the repo. The directories
+# themselves stay tracked via .gitkeep so the skill's paths always exist.
+profile/photos/closet/*
+profile/photos/inspiration/*
+profile/generated/*
+!profile/photos/closet/.gitkeep
+!profile/photos/inspiration/.gitkeep

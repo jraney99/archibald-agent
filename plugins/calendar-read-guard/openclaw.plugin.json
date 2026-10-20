@@ -1,0 +1,33 @@
+{
+  "id": "calendar-read-guard",
+  "name": "Calendar Read Guard",
+  "description": "Rewrites raw `gog calendar` reads (and broken fetch_calendar.py|jq pipes) in the exec tool to a clean multi-calendar fetch_calendar.py call, so a fast/low-context model that guesses gog flags or the wrong JSON schema still gets complete 3-calendar results.",
+  "activation": {
+    "onStartup": true,
+    "onCapabilities": ["hook"]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "defaultDays": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 180,
+        "description": "Window (days from today) when the rewritten read names no date range."
+      },
+      "minDays": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 180,
+        "description": "Minimum span enforced when the read gives an explicit range but no --query."
+      },
+      "minSearchDays": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 365,
+        "description": "Window applied to a --query read that names no date range."
+      }
+    }
+  }
+}
