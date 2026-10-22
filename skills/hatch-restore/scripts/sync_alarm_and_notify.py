@@ -33,6 +33,7 @@ now instead of two.
 Usage:
     python3 sync_alarm_and_notify.py
 """
+import os
 import json
 import sys
 import urllib.request
@@ -43,7 +44,7 @@ sys.path.insert(0, str(SCRIPTS_DIR))
 
 import sync_alarm  # noqa: E402
 
-TG_TOKEN = __import__("runpy").run_path("~/.openclaw/workspace/Skills/shared/runtime_secrets.py")["require_secret"]("TELEGRAM_BOT_TOKEN")
+TG_TOKEN = __import__("runpy").run_path(os.path.expanduser("~/.openclaw/workspace/Skills/shared/runtime_secrets.py"))["require_secret"]("TELEGRAM_BOT_TOKEN")
 TG_CHAT_ID = "1000000001"
 
 

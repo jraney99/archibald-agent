@@ -9,11 +9,12 @@ time zone should read it from here instead of hardcoding America/Chicago.
 """
 from __future__ import annotations
 
+import os
 import json
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-HEVY_CONFIG = Path("~/.openclaw/workspace/Skills/hevy-workout/config/hevy_config.json")
+HEVY_CONFIG = Path(os.path.expanduser("~/.openclaw/workspace/Skills/hevy-workout/config/hevy_config.json")).expanduser()
 
 HOME_TZ = "America/Chicago"
 HOME_LAT, HOME_LON = 40.0000, -75.0000  # home (placeholder coordinates)

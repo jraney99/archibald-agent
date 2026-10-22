@@ -24,13 +24,14 @@ end-to-end. Selectors live in config/restaurant_booking_config.json ->
 """
 from __future__ import annotations
 
+import os
 import json
 import re
 import subprocess
 import time
 from pathlib import Path
 
-OPENCLAW_JSON = Path("~/.openclaw/openclaw.json")
+OPENCLAW_JSON = Path(os.path.expanduser("~/.openclaw/openclaw.json")).expanduser()
 HOME_URL = "https://www.opentable.com/"
 BROWSER_TIMEOUT = 120
 # `openclaw browser navigate` pins its gateway wait at 20s inside the CLI itself

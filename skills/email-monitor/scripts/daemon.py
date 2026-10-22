@@ -19,12 +19,12 @@ from pathlib import Path
 from typing import Optional
 from zoneinfo import ZoneInfo
 
-sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
 from usage_logger import log_usage
 from current_location import get_tz
 from monitoring import MonitoringStore
 
-sys.path.insert(0, "~/.openclaw/workspace/Skills/email-monitor/scripts")
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/scripts"))
 from airport_timing import leave_time_for_flight
 from compute_leave_time import one_line_reason
 from fetch_calendar import gog_env
@@ -36,7 +36,7 @@ import arrival_filing as _arrive
 import refile_rules as _refile
 import networking_plan as _networking
 
-sys.path.insert(0, "~/.openclaw/workspace/Skills/afrexai-personal-finance/scripts")
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/afrexai-personal-finance/scripts"))
 import finance_mail_rules as _finance_mail
 
 def _get_key(name: str) -> str:
@@ -46,15 +46,15 @@ def _get_key(name: str) -> str:
     workspace that bypassed runtime_secrets — and therefore the only one the test-time
     Telegram fence could not reach. Everything else already asks there."""
     try:
-        sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+        sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
         from runtime_secrets import get_secret
         return get_secret(name, "")
     except Exception:
         return ""
 
 # ── Constants ──────────────────────────────────────────────────────────────────
-TOKEN_FILE      = "~/.openclaw/gmail_monitor_token.json"
-STATE_FILE      = "~/.openclaw/email_monitor_state.json"
+TOKEN_FILE      = os.path.expanduser("~/.openclaw/gmail_monitor_token.json")
+STATE_FILE      = os.path.expanduser("~/.openclaw/email_monitor_state.json")
 SCOPES          = [
     "https://www.googleapis.com/auth/gmail.modify",
     "https://www.googleapis.com/auth/gmail.settings.basic",
@@ -75,7 +75,7 @@ SENDER_SWEEP_INTERVAL_S = 900
 TG_POLL_TIMEOUT = 30
 PENDING_TTL_S   = 172800   # 48 h
 SIG_TTL_S       = 43200    # 12 h
-_MONITOR = MonitoringStore(Path("~/.openclaw/workspace/state/monitoring.sqlite"))
+_MONITOR = MonitoringStore(Path(os.path.expanduser("~/.openclaw/workspace/state/monitoring.sqlite")).expanduser())
 
 # VIP senders — people the user always wants to hear about, regardless of how the
 # email looks. A match (a) bypasses the L1 bulk/no-reply gate and (b) floors the
@@ -146,19 +146,19 @@ CANCEL_RE = re.compile(
     re.IGNORECASE,
 )
 
-UV_FILE             = Path("~/.openclaw/pending_uv_event.json")
-DIARY_FILE          = Path("~/.openclaw/pending_diary_entry.json")
-CAL_FILE            = Path("~/.openclaw/pending_cal_event.json")
-CAL_QUEUE_FILE      = Path("~/.openclaw/pending_cal_queue.json")
-JS_LOG_FILE         = Path("~/.openclaw/workspace/diary/log.md")
-SEND_PROPOSAL       = "~/.openclaw/workspace/Skills/shared/send_proposal.py"
+UV_FILE             = Path(os.path.expanduser("~/.openclaw/pending_uv_event.json")).expanduser()
+DIARY_FILE          = Path(os.path.expanduser("~/.openclaw/pending_diary_entry.json")).expanduser()
+CAL_FILE            = Path(os.path.expanduser("~/.openclaw/pending_cal_event.json")).expanduser()
+CAL_QUEUE_FILE      = Path(os.path.expanduser("~/.openclaw/pending_cal_queue.json")).expanduser()
+JS_LOG_FILE         = Path(os.path.expanduser("~/.openclaw/workspace/diary/log.md")).expanduser()
+SEND_PROPOSAL       = os.path.expanduser("~/.openclaw/workspace/Skills/shared/send_proposal.py")
 
 PENDING_ACTIONS     = {"uv": UV_FILE, "diary": DIARY_FILE, "cal": CAL_FILE}
-MORNING_FILE        = Path("~/.openclaw/pending_morning_journal.json")
-GRATITUDE_FILE      = Path("~/.openclaw/pending_morning_gratitude.json")
-MORNING_SCRIPT      = "~/.openclaw/workspace/Skills/morning-briefing/scripts/morning_briefing.py"
+MORNING_FILE        = Path(os.path.expanduser("~/.openclaw/pending_morning_journal.json")).expanduser()
+GRATITUDE_FILE      = Path(os.path.expanduser("~/.openclaw/pending_morning_gratitude.json")).expanduser()
+MORNING_SCRIPT      = os.path.expanduser("~/.openclaw/workspace/Skills/morning-briefing/scripts/morning_briefing.py")
 
-HEVY_CONFIG_FILE    = Path("~/.openclaw/workspace/Skills/hevy-workout/config/hevy_config.json")
+HEVY_CONFIG_FILE    = Path(os.path.expanduser("~/.openclaw/workspace/Skills/hevy-workout/config/hevy_config.json")).expanduser()
 COACH_OFFICE_NAME    = "Example Park Office"
 COACH_OFFICE_ADDRESS = "100 Example St, Example City, ST 00000"
 
@@ -1150,7 +1150,7 @@ def _build_cal_proposal(extracted) -> Optional[dict]:
         reminder_min = None
         if extracted.get("is_recurring_appointment") and extracted.get("address"):
             try:
-                sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+                sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
                 from drive_time import leave_by_minutes
                 reminder_min = leave_by_minutes(address)
             except Exception as e:
@@ -1850,7 +1850,7 @@ def _handle_televisit(subject: str, body: str, ics_uid: str = "") -> bool:
 
         reminder_min = None
         try:
-            sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+            sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
             from drive_time import leave_by_minutes
             reminder_min = leave_by_minutes(COACH_OFFICE_ADDRESS)
         except Exception as e:
@@ -2525,14 +2525,14 @@ def _labeled_out_backstop() -> None:
              f"backstop: {len(msgs)} scanned, {cheap_skipped} L1-skipped, {notified} notified")
 
 
-JOBS_FILE        = Path("~/.openclaw/cron/jobs.json")
-TRAVEL_CFG_FILE  = Path("~/.openclaw/workspace/Skills/email-monitor/travel_config.json")
-TRAVEL_REMINDER  = "~/.openclaw/workspace/Skills/email-monitor/scripts/travel_reminder.py"
-PROMPT_FLIGHT_LOG = "~/.openclaw/workspace/Skills/email-monitor/scripts/prompt_flight_log.py"
-PROMPT_CHECKIN   = "~/.openclaw/workspace/Skills/email-monitor/scripts/prompt_checkin.py"
-SEND_TELEGRAM    = "~/.openclaw/workspace/Skills/shared/send_telegram.py"
-RUN_AND_EXTRACT  = "~/.openclaw/workspace/Skills/shared/run_and_extract.py"
-DETECT_TRAVEL    = "~/.openclaw/workspace/Skills/hevy-workout/scripts/detect_travel.py"
+JOBS_FILE        = Path(os.path.expanduser("~/.openclaw/cron/jobs.json")).expanduser()
+TRAVEL_CFG_FILE  = Path(os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/travel_config.json")).expanduser()
+TRAVEL_REMINDER  = os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/scripts/travel_reminder.py")
+PROMPT_FLIGHT_LOG = os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/scripts/prompt_flight_log.py")
+PROMPT_CHECKIN   = os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/scripts/prompt_checkin.py")
+SEND_TELEGRAM    = os.path.expanduser("~/.openclaw/workspace/Skills/shared/send_telegram.py")
+RUN_AND_EXTRACT  = os.path.expanduser("~/.openclaw/workspace/Skills/shared/run_and_extract.py")
+DETECT_TRAVEL    = os.path.expanduser("~/.openclaw/workspace/Skills/hevy-workout/scripts/detect_travel.py")
 
 
 def _travel_cfg() -> dict:
@@ -2652,7 +2652,7 @@ def _lodging_for_trip(dep_dt: datetime, cfg: dict) -> Optional[dict]:
         _log("Cal", f"lodging checkout check error: {e}")
         return None
 
-    sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+    sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
     try:
         from drive_time import geocode
         coords = geocode(candidate["location"])
@@ -3272,7 +3272,7 @@ Respond with ONLY the final reply text."""
 # at all, so the next draft would have opened exactly the same way. Anything he tags [email]
 # now reaches the writer that actually composes his mail. Re-read on mtime so a new rule
 # applies without restarting the daemon.
-STANDING_FILE = Path("~/.openclaw/workspace/memory/domains/standing-instructions.md")
+STANDING_FILE = Path(os.path.expanduser("~/.openclaw/workspace/memory/domains/standing-instructions.md")).expanduser()
 _STANDING_LINE = re.compile(r"^- (\d{4}-\d{2}-\d{2}) \[([a-z]+)\] (.+)$")
 STANDING_TOPICS = ("email",)
 STANDING_MAX_CHARS = 1200
@@ -3729,7 +3729,7 @@ def _display_name(sender: str) -> str:
     return m.group(1).strip() if m else sender
 
 
-PENDING_FILTER = Path("~/.openclaw/pending_filter.json")
+PENDING_FILTER = Path(os.path.expanduser("~/.openclaw/pending_filter.json")).expanduser()
 def _sender_cfg() -> dict:
     """Sender config, reloaded when senders.json / learned_senders.json change,
     so a sender the user just confirmed is recognised without a daemon restart."""
@@ -3870,7 +3870,7 @@ def _maybe_propose_sender_filter(sender: str, subject: str, svc=None) -> None:
     _log("Gmail", f"sender-filter proposal sent: {address} → {label}")
 
 
-PENDING_UNSUB = Path("~/.openclaw/pending_unsub.json")
+PENDING_UNSUB = Path(os.path.expanduser("~/.openclaw/pending_unsub.json")).expanduser()
 _UNSUB_MIN_INBOX = 3   # only offer once a promo sender has piled up this many
 
 
@@ -4174,7 +4174,7 @@ def _queue_fyi(sender: str, subject: str, summary: str, mid: str) -> None:
 
 
 # ── CRM logging ───────────────────────────────────────────────────────────────
-CRM_SCRIPT = "~/.openclaw/workspace/Skills/crm/scripts/crm.py"
+CRM_SCRIPT = os.path.expanduser("~/.openclaw/workspace/Skills/crm/scripts/crm.py")
 
 def _crm_log(sender: str, subject: str, tier: str, source_id: str = "",
              occurred_at: str = "") -> None:

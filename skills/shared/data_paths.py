@@ -33,7 +33,7 @@ from pathlib import Path
 # helper resolved through here can never write live state (2026-10-02: watcher and
 # occasion tests appended to the real context_prompt_attempts.jsonl). Production
 # never sets it, so the default is the one place data has always lived.
-OPENCLAW = Path(os.environ.get("OPENCLAW_HOME") or "~/.openclaw")
+OPENCLAW = Path(os.environ.get("OPENCLAW_HOME") or "~/.openclaw").expanduser()
 SKILLS = OPENCLAW / "workspace" / "Skills"
 KINDS = ("config", "data", "state")
 
@@ -219,7 +219,7 @@ MOVED: frozenset[str] = frozenset()
 
 # The real deployment's skill folders, used to validate a skill NAME even when
 # OPENCLAW_HOME points a test at a sandbox that has no folders of its own.
-_REAL_SKILLS = Path("~/.openclaw") / "workspace" / "Skills"
+_REAL_SKILLS = Path(os.path.expanduser("~/.openclaw")).expanduser() / "workspace" / "Skills"
 
 
 def new_file(skill: str, kind: str, name: str) -> Path:

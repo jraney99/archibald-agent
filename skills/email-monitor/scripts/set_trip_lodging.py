@@ -10,11 +10,12 @@ Reuses the exact same cancel-and-reschedule path _maybe_upgrade_flight_reminders
 this is that same mechanism, just triggered by the user telling Archibald directly
 instead of an email.
 """
+import os
 import argparse, sys
 from datetime import datetime
 
-sys.path.insert(0, "~/.openclaw/workspace/Skills/email-monitor/scripts")
-sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/scripts"))
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
 
 GOG   = "/opt/homebrew/bin/gog"
 EMAIL = "owner@example.com"

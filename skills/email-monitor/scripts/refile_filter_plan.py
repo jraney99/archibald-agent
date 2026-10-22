@@ -9,6 +9,7 @@ name-based `from:"…"` Gmail doesn't honour) is visible before anything is appl
 """
 from __future__ import annotations
 
+import os
 import json
 import sys
 import time
@@ -65,7 +66,7 @@ def _same_filter(live: dict, criteria: dict, action: dict, label_names: dict) ->
             and sorted(have.get("removeLabelIds", [])) == sorted(action.get("removeLabelIds", [])))
 
 
-STATE_FILE = Path("~/.openclaw/email_monitor_state.json")
+STATE_FILE = Path(os.path.expanduser("~/.openclaw/email_monitor_state.json")).expanduser()
 
 
 def approved_filter_ids(state_file: Path = None) -> set:

@@ -1,0 +1,5 @@
+{
+  "helper": ".lib/build-stamp.mjs",
+  "hash_label": "../.lib/build-stamp.mjs",
+  "manifest_label": "../.lib/build-stamp-location.json"
+}

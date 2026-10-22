@@ -84,6 +84,7 @@ docs/               the agent's rulebook: RULES.md index, SECURITY.md, AGENTS.md
 skills/shared/      infrastructure every skill uses: data paths, approvals, Telegram send,
                     proposals, misfire guard for cron timing, calendar fetch, drive time
 skills/<skill>/     SKILL.md (what the model reads) + scripts/ (what actually runs) + tests
+test-fixtures/      guard regression harness: replays captured real hook shapes + nightly runner
 ```
 
 ### Skills included
@@ -105,6 +106,43 @@ skills/<skill>/     SKILL.md (what the model reads) + scripts/ (what actually ru
 Not included: skills covering health, finances, relationships, job search and contacts, which are
 personal by nature, and skills that came from the community registry rather than from me.
 Some code still references those skills by name.
+
+---
+
+## Testing the guards against the real contract
+
+A guard tested only against a hand-written stand-in proves very little. The hook it registers
+might never receive the fields the test assumes. [`test-fixtures/`](test-fixtures) replays
+**tool-call shapes captured from real agent sessions** (values sanitized; keys, types and array
+lengths preserved) through each plugin's *registered* handler, with child processes, network and
+file writes trapped. The aggregate runner also fails if a plugin ships without fixture coverage
+or registers a hook that no test reaches. Details: [`test-fixtures/README.md`](test-fixtures/README.md).
+
+[`nightly_guard_check.py`](test-fixtures/nightly_guard_check.py) runs the suite unattended every
+day. It stays silent on a pass, and messages only when a failure is new or has changed, so a
+known breakage doesn't nag every morning.
+
+### Run it
+
+```bash
+# every guard plugin — no network, no messages, nothing outside the sandboxed HOME
+export HOME=$(mktemp -d) TELEGRAM_SEND_DISABLED=1
+for t in plugins/*/test.mjs; do node "$t" >/dev/null && echo "PASS $t" || echo "FAIL $t"; done
+```
+
+All 11 guard suites pass from a clean checkout (tested on Node 25 and Python 3.9).
+`node test-fixtures/test-all.mjs` runs the full deployment suite. In this extract, some *skill*
+suites in it fail because they need private config, captured browser flows or device libraries
+that aren't published. They're left visible rather than hidden.
+
+## Running it like a system, not a demo
+
+| Tool | Why it exists |
+|---|---|
+| [`compact_session.py`](skills/shared/compact_session.py) | Each message re-caches the whole history. Measured: a message right after compaction rewrites ~1,900 tokens; one after 18 hours of talk rewrites ~38,600. Compaction runs on a schedule and when the session grows past a size threshold |
+| [`agent_usage.py`](skills/shared/agent_usage.py), [`usage_audit_v2.py`](skills/shared/usage_audit_v2.py) | Read-only token and cost accounting across conversations, scheduled jobs and direct API calls, with coverage gaps stated explicitly rather than guessed |
+| [`check_bootstrap_budget.py`](skills/shared/check_bootstrap_budget.py) | One instruction file grew and silently pushed others, including the persona file, past the runtime's prompt budget. Nothing noticed for two weeks. This check runs weekly and speaks only when something is cut |
+| [`gateway_drift.py`](skills/shared/gateway_drift.py) | Proves the running gateway actually loaded the guard code on disk. "I edited the guard" is not "the guard is live". It returns PASS only on proof, otherwise STALE or NOT_VERIFIABLE |
 
 ---
 

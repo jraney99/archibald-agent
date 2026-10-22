@@ -17,8 +17,9 @@
  */
 
 import { readFileSync } from "node:fs";
+import os from "node:os";
 
-export const NUDGE_INDEX_PATH = "~/.openclaw/meal_nudge_index.json";
+export const NUDGE_INDEX_PATH = `${os.homedir()}/.openclaw/meal_nudge_index.json`;
 const MAX_WORDS_LEN = 500;
 
 export function loadNudgeIndex(indexPath = NUDGE_INDEX_PATH) {

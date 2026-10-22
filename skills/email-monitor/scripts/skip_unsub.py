@@ -5,17 +5,18 @@ skip:unsub — the user tapped "❌ Keep" on an unsubscribe proposal.
 Records a permanent decline for that address so the daemon never offers to
 unsubscribe from it again, and clears the pending slot.
 """
+import os
 import json
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import sender_filter as sf
-sys.path.insert(0, str(Path("~/.openclaw/workspace/Skills/shared")))
+sys.path.insert(0, str(Path(os.path.expanduser("~/.openclaw/workspace/Skills/shared")).expanduser()))
 from pending_proposal import load_message_id, edit_or_fallback  # noqa: E402
 
-PENDING = Path("~/.openclaw/pending_unsub.json")
-STATE = Path("~/.openclaw/email_monitor_state.json")
+PENDING = Path(os.path.expanduser("~/.openclaw/pending_unsub.json")).expanduser()
+STATE = Path(os.path.expanduser("~/.openclaw/email_monitor_state.json")).expanduser()
 
 
 def main() -> None:

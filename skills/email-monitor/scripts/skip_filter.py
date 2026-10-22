@@ -5,17 +5,18 @@ skip:filter — the user tapped "❌ Never" on a recurring-sender proposal.
 Records a permanent decline for that exact address in the daemon state file so
 the daemon never proposes a filter for it again, and clears the pending slot.
 """
+import os
 import json
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import sender_filter as ff
-sys.path.insert(0, str(Path("~/.openclaw/workspace/Skills/shared")))
+sys.path.insert(0, str(Path(os.path.expanduser("~/.openclaw/workspace/Skills/shared")).expanduser()))
 from pending_proposal import load_message_id, edit_or_fallback  # noqa: E402
 
-PENDING = Path("~/.openclaw/pending_filter.json")
-STATE = Path("~/.openclaw/email_monitor_state.json")
+PENDING = Path(os.path.expanduser("~/.openclaw/pending_filter.json")).expanduser()
+STATE = Path(os.path.expanduser("~/.openclaw/email_monitor_state.json")).expanduser()
 
 
 def main() -> None:

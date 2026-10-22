@@ -39,11 +39,12 @@ import { pendingContext } from "./pending-context.mjs";
 import { dispatchFinance, recordFinanceDelivery } from './finance-intake.mjs';
 import { inspectFinanceWrite } from './finance-write-guard.mjs';
 import { cryptoDestinationArgv } from './crypto-sweep.mjs';
+import os from "node:os";
 
 const execFileP = promisify(execFile);
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const SKILLS_DIR = "~/.openclaw/workspace/Skills";
-const OPENCLAW_DIR = "~/.openclaw";
+const SKILLS_DIR = path.join(os.homedir(), ".openclaw/workspace/Skills");
+const OPENCLAW_DIR = path.join(os.homedir(), ".openclaw");
 const DEFAULT_TIMEOUT_MS = 20000;
 
 const TABLE_PATH = path.join(HERE, "dispatch-table.json");
@@ -90,7 +91,8 @@ export function resolveEntry(token) {
 
 async function runScript(argv, env, timeoutMs) {
   const script = path.join(SKILLS_DIR, argv[0]);
-  const rest = argv.slice(1);
+  // dispatch-table.json writes home paths as "~/..."; execFile has no shell to expand them.
+  const rest = argv.slice(1).map((a) => (a.startsWith("~/") ? path.join(os.homedir(), a.slice(2)) : a));
   try {
     const { stdout } = await execFileP("python3", ["-W", "ignore", script, ...rest], {
       cwd: path.dirname(script),

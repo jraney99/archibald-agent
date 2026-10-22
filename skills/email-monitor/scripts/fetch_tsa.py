@@ -26,6 +26,7 @@ Sources, in order:
 """
 from __future__ import annotations
 
+import os
 import json
 import math
 import statistics
@@ -34,7 +35,7 @@ import urllib.request
 from datetime import datetime
 from typing import Optional
 
-sys.path.insert(0, "~/.openclaw/workspace/Skills/email-monitor/scripts")
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/scripts"))
 from airport_timing import resolve_security as _resolve_security
 
 
@@ -151,7 +152,7 @@ def get_security_p85(cfg: dict, airport: str, dep_dt: datetime, terminal: str = 
 if __name__ == "__main__":
     import sys
 
-    sys.path.insert(0, "~/.openclaw/workspace/Skills/email-monitor/scripts")
+    sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/scripts"))
     from airport_timing import load_cfg
 
     ap = sys.argv[1] if len(sys.argv) > 1 else "DAL"

@@ -32,6 +32,7 @@ Flow mapped live 2026-08-26 against Restaurant A and extended
 checkbox Restaurant A does not have. Selectors live in
 config/restaurant_booking_config.json -> "selectors".
 """
+import os
 import json
 import re
 import subprocess
@@ -52,9 +53,9 @@ CFG = json.loads((SCRIPT_DIR.parent / "config" / "restaurant_booking_config.json
 SEL = CFG["selectors"]
 SAFETY = CFG["safety"]
 SEATING = CFG.get("seating", {})
-PENDING_FILE = Path("~/.openclaw/pending_restaurant_booking.json")
+PENDING_FILE = Path(os.path.expanduser("~/.openclaw/pending_restaurant_booking.json")).expanduser()
 SCREENSHOT_PATH = str(SCRIPT_DIR.parent / "last_checkout.png")
-ADD_CAL = "~/.openclaw/workspace/Skills/shared/add_calendar_event.py"
+ADD_CAL = os.path.expanduser("~/.openclaw/workspace/Skills/shared/add_calendar_event.py")
 
 
 def abort(msg: str, code: int = 2):

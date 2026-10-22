@@ -52,7 +52,7 @@ from data_paths import path as data_path  # noqa: E402
 API_BASE = "https://api.developer.sleep.me/v1"
 # Matches RUNTIME in shared/test_data_layout.py: openclaw.json is the deployment's
 # own credential file, not skill data, so it is the one path a script may name.
-OPENCLAW_JSON = Path("~/.openclaw/openclaw.json")
+OPENCLAW_JSON = Path(os.path.expanduser("~/.openclaw/openclaw.json")).expanduser()
 
 TEMP_MIN_F, TEMP_MAX_F = 55, 115
 TEMP_MIN_C, TEMP_MAX_C = 13.0, 48.0

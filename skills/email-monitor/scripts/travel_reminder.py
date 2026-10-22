@@ -15,6 +15,7 @@ wired in; when that lands, this script passes the live p85 through.
 Arg surface is kept stable — daemon.py stores this exact command in the cron
 job and _cancel_stale_flight_reminders matches stale jobs by `--confirmation`.
 """
+import os
 import argparse
 import json
 import math
@@ -29,10 +30,10 @@ from airport_timing import leave_time_for_flight, load_cfg
 from compute_leave_time import one_line_reason
 from fetch_tsa import get_security_p85
 
-TG_TOKEN   = __import__("runpy").run_path("~/.openclaw/workspace/Skills/shared/runtime_secrets.py")["require_secret"]("TELEGRAM_BOT_TOKEN")
+TG_TOKEN   = __import__("runpy").run_path(os.path.expanduser("~/.openclaw/workspace/Skills/shared/runtime_secrets.py"))["require_secret"]("TELEGRAM_BOT_TOKEN")
 TG_CHAT_ID = "1000000001"
 
-STATE_FILE = Path("~/.openclaw/flight_timing_state.json")
+STATE_FILE = Path(os.path.expanduser("~/.openclaw/flight_timing_state.json")).expanduser()
 RECHECK_THRESHOLD_MIN = 15   # T-90m re-check only pings if it moved more than this
 
 

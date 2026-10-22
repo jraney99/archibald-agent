@@ -20,16 +20,17 @@ own reply, exactly as before. With the flag, and only when this entry has a
 source_tg_msg_id (the button message), the original message is edited in
 place and NO_REPLY is printed instead - see pending_proposal.py.
 """
+import os
 import base64, json, sys
 from email.mime.text import MIMEText
 from pathlib import Path
 
-sys.path.insert(0, str(Path("~/.openclaw/workspace/Skills/shared")))
+sys.path.insert(0, str(Path(os.path.expanduser("~/.openclaw/workspace/Skills/shared")).expanduser()))
 from pending_proposal import edit_or_fallback  # noqa: E402
 from approval import require_cli, lookup, finish, fingerprint
 
-STATE_FILE = "~/.openclaw/email_monitor_state.json"
-TOKEN_FILE = "~/.openclaw/gmail_monitor_token.json"
+STATE_FILE = os.path.expanduser("~/.openclaw/email_monitor_state.json")
+TOKEN_FILE = os.path.expanduser("~/.openclaw/gmail_monitor_token.json")
 MY_EMAIL   = "owner@example.com"
 SCOPES     = [
     "https://www.googleapis.com/auth/gmail.modify",

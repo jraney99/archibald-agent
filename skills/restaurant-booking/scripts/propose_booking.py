@@ -20,6 +20,7 @@ Usage:
         --date 2026-08-28 --time "5:30 PM" --party 2 \
         [--duration 90] [--note "anniversary"] [--skip-terms-check]
 """
+import os
 import argparse
 import json
 import subprocess
@@ -33,8 +34,8 @@ import browser_helpers as bh  # noqa: E402
 
 CFG = json.loads((SCRIPT_DIR.parent / "config" / "restaurant_booking_config.json").read_text())
 SEL = CFG["selectors"]
-PENDING_FILE = Path("~/.openclaw/pending_restaurant_booking.json")
-PROPOSAL_SCRIPT = "~/.openclaw/workspace/Skills/shared/send_inline_proposal.py"
+PENDING_FILE = Path(os.path.expanduser("~/.openclaw/pending_restaurant_booking.json")).expanduser()
+PROPOSAL_SCRIPT = os.path.expanduser("~/.openclaw/workspace/Skills/shared/send_inline_proposal.py")
 
 
 def seating_phrase(label: str) -> str:
@@ -198,7 +199,7 @@ def main():
     except Exception:  # noqa: BLE001
         msg_id = None
     if msg_id:
-        sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+        sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
         from pending_proposal import save_message_id
         save_message_id(PENDING_FILE, msg_id)
     print(json.dumps({

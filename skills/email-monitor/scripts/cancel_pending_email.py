@@ -3,14 +3,15 @@
 Cancel the most recent pending email draft.
 Called by Archibald when user taps ❌ (skip:email) on a draft button.
 """
+import os
 import json, sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path("~/.openclaw/workspace/Skills/shared")))
+sys.path.insert(0, str(Path(os.path.expanduser("~/.openclaw/workspace/Skills/shared")).expanduser()))
 from pending_proposal import edit_or_fallback  # noqa: E402
 from approval import lookup, require_cli, finish
 
-STATE_FILE = Path("~/.openclaw/email_monitor_state.json")
+STATE_FILE = Path(os.path.expanduser("~/.openclaw/email_monitor_state.json")).expanduser()
 
 
 def main():

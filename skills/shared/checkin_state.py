@@ -29,19 +29,20 @@ Usage (from a log_*.py handler):
 """
 from __future__ import annotations
 
+import os
 import json
 import sys
 import urllib.request
 from pathlib import Path
 
 try:  # chat cleanup (2026-09-20): answered prompts are archived + removed at the nightly sweep
-    sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+    sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
     from chat_cleanup import mark_answered
 except Exception:  # never let chat hygiene break a log
     def mark_answered(*a, **k):
         return False
 
-TG_TOKEN = __import__("runpy").run_path("~/.openclaw/workspace/Skills/shared/runtime_secrets.py")["require_secret"]("TELEGRAM_BOT_TOKEN")
+TG_TOKEN = __import__("runpy").run_path(os.path.expanduser("~/.openclaw/workspace/Skills/shared/runtime_secrets.py"))["require_secret"]("TELEGRAM_BOT_TOKEN")
 TG_CHAT_ID = "1000000001"
 
 

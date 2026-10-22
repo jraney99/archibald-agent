@@ -20,6 +20,7 @@ What each group is here to stop coming back:
     python3 test_chilipad.py
 """
 
+import os
 import json
 import sys
 import tempfile
@@ -988,7 +989,7 @@ class RatePrompt(unittest.TestCase):
         """The guard for the bug above: if either redirect stops working, this
         fails before any test writes to the real file."""
         self.assertEqual(trial._state_file(), self.nights)
-        self.assertFalse(str(rp.PROMPT_STATE).startswith("~/.openclaw/workspace"))
+        self.assertFalse(str(rp.PROMPT_STATE).startswith(os.path.expanduser("~/.openclaw/workspace")))
 
     # --- the gate -------------------------------------------------------
     def test_disabled_refuses_to_send(self):
@@ -1091,7 +1092,7 @@ class RatePrompt(unittest.TestCase):
 
     def test_every_button_is_registered_in_the_dispatch_table(self):
         table = json.loads((Path("~/.openclaw/plugins/callback-dispatch/"
-                                 "dispatch-table.json")).read_text())["exact"]
+                                 "dispatch-table.json").expanduser()).read_text())["exact"]
         for _, _, callback in rp.BUTTONS:
             self.assertIn(callback, table, f"{callback} would be a dead button")
             self.assertEqual(table[callback]["argv"][0],

@@ -11,6 +11,7 @@ RULES.md can route the user's yes/no reply straight to set_checked_bag.py. Wheth
 he's checking a bag usually isn't decided days out at booking time, so this is
 the earliest point it's worth asking.
 """
+import os
 import argparse
 import json
 import subprocess
@@ -18,8 +19,8 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-PENDING       = Path("~/.openclaw/pending_checked_bag.json")
-SEND_TELEGRAM = "~/.openclaw/workspace/Skills/shared/send_telegram.py"
+PENDING       = Path(os.path.expanduser("~/.openclaw/pending_checked_bag.json")).expanduser()
+SEND_TELEGRAM = os.path.expanduser("~/.openclaw/workspace/Skills/shared/send_telegram.py")
 
 
 def main():

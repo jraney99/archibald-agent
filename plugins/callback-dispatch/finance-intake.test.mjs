@@ -2,16 +2,18 @@ import assert from 'node:assert/strict';
 import plugin from './index.mjs';
 import {intakeArgv,dispatchFinance,recordFinanceDelivery} from './finance-intake.mjs';
 import {inspectFinanceWrite} from './finance-write-guard.mjs';
+import os from 'node:os';
+const OC = os.homedir() + '/.openclaw';
 const config={channels:{telegram:{allowFrom:['test-owner']}}};
 // Installed reply_dispatch envelope. MediaPaths is absent from before_dispatch.
 const event={sendPolicy:'allow',ctx:{Provider:'telegram',SenderId:'test-owner',AccountId:'default',
   SessionKey:'agent:main:telegram:direct:test-owner',MessageSid:'123',
-  MediaPaths:['~/.openclaw/media/inbound/one.pdf','~/.openclaw/media/inbound/two.pdf']}};
+  MediaPaths:[OC+'/media/inbound/one.pdf',OC+'/media/inbound/two.pdf']}};
 const argv=intakeArgv(event,{},config);
 assert.deepEqual(argv.slice(3,5),event.ctx.MediaPaths);
 assert.equal(intakeArgv({...event,ctx:{...event.ctx,SenderId:'outsider'}},{},config),null);
 assert.equal(intakeArgv({...event,ctx:{...event.ctx,MediaPaths:['/private/tmp/untrusted.pdf']}},{},config),null);
-assert.equal(intakeArgv({...event,ctx:{...event.ctx,MediaPaths:[...event.ctx.MediaPaths,'~/.openclaw/media/inbound/receipt.png']}},{},config),null);
+assert.equal(intakeArgv({...event,ctx:{...event.ctx,MediaPaths:[...event.ctx.MediaPaths,OC+'/media/inbound/receipt.png']}},{},config),null);
 let ran=0,sent=[],calls=[];
 const runner=async(args,env)=>{ran++;calls.push(args);
   if(args[0].endsWith('finance_delivery.py')) return {ok:true,out:'{"send":true}'};
@@ -33,10 +35,10 @@ assert.equal(deliveryCalls.length,2);
 assert.equal(deliveryCalls[0][1],'mark-digest');
 assert.equal(deliveryCalls[1][2],'--status');assert.equal(deliveryCalls[1][3],'delivered');
 assert.equal(inspectFinanceWrite('exec',{command:'python3 - <<\'PY\'\np="workspace/Finance/spending/card-1111-2026.json"\nopen(p,"w").write("{}")\nPY'}).block,true);
-assert.equal(inspectFinanceWrite('write',{path:'~/.openclaw/workspace/Finance/spending/card-1111-2026.json',content:'{}'}).block,true);
+assert.equal(inspectFinanceWrite('write',{path:OC+'/workspace/Finance/spending/card-1111-2026.json',content:'{}'}).block,true);
 assert.equal(inspectFinanceWrite('exec',{command:'python3 ~/.openclaw/workspace/Skills/afrexai-personal-finance/scripts/finance_intake.py status'}),undefined);
 assert.equal(inspectFinanceWrite('write',{path:'/private/tmp/ordinary-note.txt',content:'hello'}),undefined);
-const finance='~/.openclaw/workspace/Finance';
+const finance=OC+'/workspace/Finance';
 const blockedCommands=[
   `cd ${finance} && echo x > relative.json`,
   `cd ${finance}; python3 fix.py`,
@@ -114,5 +116,5 @@ const registered=new Map();
 plugin.register({config,logger:{warn(){},info(){}},on:(name,fn)=>registered.set(name,fn)});
 assert.ok(registered.has('reply_dispatch'));assert.ok(registered.has('before_tool_call'));
 assert.ok(registered.has('message_sent'));
-assert.equal(registered.get('before_tool_call')({toolName:'edit',params:{path:'~/.openclaw/workspace/Finance/spending/card-0000-2026.json'}}).block,true);
+assert.equal(registered.get('before_tool_call')({toolName:'edit',params:{path:OC+'/workspace/Finance/spending/card-0000-2026.json'}}).block,true);
 console.log('Finance dispatcher: runtime media envelope, owner, two PDFs, dry run, mutation boundary passed');

@@ -45,6 +45,7 @@ export const BUILD_STAMP = pluginBuildStamp(import.meta.url);
  */
 
 import { readFileSync } from "node:fs";
+import os from "node:os";
 
 const SERVER_PREFIX = "brokerage__";
 // Cron jobs allowed to look at the brokerage and propose trades. Guard data: the
@@ -94,7 +95,7 @@ export const TRADE_TOOLS = new Set([
 // proposal couldn't show the user the strike or expiry. Off until he asks.
 export const OPTIONS_TOOLS = new Set(["place_option_order", "exercise_option"]);
 
-const PROPOSE = "~/.openclaw/workspace/Skills/brokerage-trading/scripts/propose_trade.py";
+const PROPOSE = `${os.homedir()}/.openclaw/workspace/Skills/brokerage-trading/scripts/propose_trade.py`;
 const BYPASS_RE =
   /\b(?:agent|api)\.broker\.example\b|\bmcp-oauth\b|\btrade_callback\b|\bbroker_mcp\b|\bapprovals\.sqlite\b|\bdaytrade\.py\b|\bday_trades\.json\b|\bbacktest\.py\b|\bdipbuy\b/i;
 const PROPOSE_RE = /\bpropose_trade\b/;

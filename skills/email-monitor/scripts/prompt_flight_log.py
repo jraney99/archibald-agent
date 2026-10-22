@@ -10,6 +10,7 @@ The user sat at the gate. RULES.md routes his reply to log_flight.py.
 Two numbers, nothing else — per the spec, any more friction and it won't get
 filled in.
 """
+import os
 import argparse
 import json
 import sys
@@ -17,9 +18,9 @@ import urllib.request
 from datetime import datetime
 from pathlib import Path
 
-PENDING = Path("~/.openclaw/pending_flight_log.json")
-STATE_FILE = Path("~/.openclaw/flight_timing_state.json")
-TG_TOKEN   = __import__("runpy").run_path("~/.openclaw/workspace/Skills/shared/runtime_secrets.py")["require_secret"]("TELEGRAM_BOT_TOKEN")
+PENDING = Path(os.path.expanduser("~/.openclaw/pending_flight_log.json")).expanduser()
+STATE_FILE = Path(os.path.expanduser("~/.openclaw/flight_timing_state.json")).expanduser()
+TG_TOKEN   = __import__("runpy").run_path(os.path.expanduser("~/.openclaw/workspace/Skills/shared/runtime_secrets.py"))["require_secret"]("TELEGRAM_BOT_TOKEN")
 TG_CHAT_ID = "1000000001"
 
 

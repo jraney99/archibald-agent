@@ -16,6 +16,7 @@ the same signal the nutrition skill's meal reminders use.
 Usage:
     python3 send_meals_reminder.py
 """
+import os
 import json
 import sys
 import urllib.request
@@ -25,9 +26,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "shared"))
 from current_location import is_away_from_home  # noqa: E402
 from misfire_guard import near_slot  # noqa: E402
 
-TG_TOKEN = __import__("runpy").run_path("~/.openclaw/workspace/Skills/shared/runtime_secrets.py")["require_secret"]("TELEGRAM_BOT_TOKEN")
+TG_TOKEN = __import__("runpy").run_path(os.path.expanduser("~/.openclaw/workspace/Skills/shared/runtime_secrets.py"))["require_secret"]("TELEGRAM_BOT_TOKEN")
 TG_CHAT_ID = "1000000001"
-STATE_PATH = Path("~/.openclaw/freezer_meals_reminder_state.json")
+STATE_PATH = Path(os.path.expanduser("~/.openclaw/freezer_meals_reminder_state.json")).expanduser()
 
 TEXT = "\U0001F501 Take out two meals from freezer to fridge \U0001F3A9"
 

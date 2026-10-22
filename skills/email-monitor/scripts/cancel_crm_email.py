@@ -3,14 +3,15 @@
 Skip the first pending CRM draft and advance to the next.
 Called by Archibald when user taps ❌ (skip:crm).
 """
+import os
 import json, sys, urllib.request
 from pathlib import Path
 
-sys.path.insert(0, str(Path("~/.openclaw/workspace/Skills/shared")))
+sys.path.insert(0, str(Path(os.path.expanduser("~/.openclaw/workspace/Skills/shared")).expanduser()))
 from pending_proposal import edit_or_fallback  # noqa: E402
 
-PENDING    = Path("~/.openclaw/pending_crm.json")
-TG_TOKEN   = __import__("runpy").run_path("~/.openclaw/workspace/Skills/shared/runtime_secrets.py")["require_secret"]("TELEGRAM_BOT_TOKEN")
+PENDING    = Path(os.path.expanduser("~/.openclaw/pending_crm.json")).expanduser()
+TG_TOKEN   = __import__("runpy").run_path(os.path.expanduser("~/.openclaw/workspace/Skills/shared/runtime_secrets.py"))["require_secret"]("TELEGRAM_BOT_TOKEN")
 TG_CHAT_ID = "1000000001"
 
 

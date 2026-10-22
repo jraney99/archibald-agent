@@ -16,6 +16,7 @@ Usage: python3 send_fyi_digest.py [--dry-run | --preview-output-mode]
 """
 from __future__ import annotations
 
+import os
 import argparse
 import json
 import sys
@@ -28,7 +29,7 @@ sys.path.insert(0, str(SCRIPT_DIR.parent.parent / "shared"))
 from output_mode import LIVE_DELIVERY, Report  # noqa: E402
 from send_telegram import chunk_text, send_chunk  # noqa: E402
 
-STATE = Path("~/.openclaw/email_monitor_state.json")
+STATE = Path(os.path.expanduser("~/.openclaw/email_monitor_state.json")).expanduser()
 CT = ZoneInfo("America/Chicago")
 
 

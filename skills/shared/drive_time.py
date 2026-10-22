@@ -11,6 +11,7 @@ falling back to his live coordinates (current_location.py) when he's at
 neither home base (hotel/traveling). Destination is geocoded via TomTom
 using the same API key already used for flight/airport drive-time reminders.
 """
+import os
 import json
 import re
 import math
@@ -24,8 +25,8 @@ from typing import Optional, Tuple
 sys.path.insert(0, str(Path(__file__).parent))
 from current_location import get_coords  # noqa: E402
 
-TRAVEL_CONFIG = Path("~/.openclaw/workspace/Skills/email-monitor/travel_config.json")
-HEVY_CONFIG   = Path("~/.openclaw/workspace/Skills/hevy-workout/config/hevy_config.json")
+TRAVEL_CONFIG = Path(os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/travel_config.json")).expanduser()
+HEVY_CONFIG   = Path(os.path.expanduser("~/.openclaw/workspace/Skills/hevy-workout/config/hevy_config.json")).expanduser()
 
 _geocode_cache = {}  # address -> (lat, lon), memoized for the life of the process
 

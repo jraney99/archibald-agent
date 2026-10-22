@@ -14,6 +14,7 @@ moment it is written, so nobody has to remember to register it.
 """
 from __future__ import annotations
 
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -37,7 +38,7 @@ def files(directory, exclude=()):
     return found
 
 
-SKILLS_ROOT = Path("~/.openclaw/workspace/Skills")
+SKILLS_ROOT = Path(os.path.expanduser("~/.openclaw/workspace/Skills")).expanduser()
 
 
 def entry_point_offenders(root=SKILLS_ROOT):

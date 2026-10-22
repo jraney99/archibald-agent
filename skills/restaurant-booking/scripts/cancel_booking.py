@@ -22,6 +22,7 @@ Usage:
     python3 cancel_booking.py propose --name "Restaurant A" --date 2026-08-28
     python3 cancel_booking.py confirm
 """
+import os
 import argparse
 import json
 import re
@@ -39,8 +40,8 @@ from pending_proposal import save_message_id, load_message_id, edit_or_fallback 
 
 CFG = json.loads((SCRIPT_DIR.parent / "config" / "restaurant_booking_config.json").read_text())
 SEL = CFG["selectors"]
-PENDING_FILE = Path("~/.openclaw/pending_restaurant_cancel.json")
-PROPOSAL_SCRIPT = "~/.openclaw/workspace/Skills/shared/send_inline_proposal.py"
+PENDING_FILE = Path(os.path.expanduser("~/.openclaw/pending_restaurant_cancel.json")).expanduser()
+PROPOSAL_SCRIPT = os.path.expanduser("~/.openclaw/workspace/Skills/shared/send_inline_proposal.py")
 
 
 def _match_block(blocks, name, date):

@@ -13,6 +13,7 @@ description or location — that's where gog surfaces the Zoom join link,
 confirmed against real events in the user's calendar. Non-Zoom video calls
 (Meet, etc.) are intentionally not matched.
 """
+import os
 import json
 import subprocess
 import sys
@@ -21,11 +22,11 @@ from pathlib import Path
 
 STATE_FILE = Path(__file__).parent / "zoom_lighting_state.json"
 from fetch_calendar import ACCOUNT, CALENDARS, read_snapshot
-CONTROL_PY = "~/.openclaw/workspace/Skills/govee-lights/scripts/control.py"
+CONTROL_PY = os.path.expanduser("~/.openclaw/workspace/Skills/govee-lights/scripts/control.py")
 # When a call ends, restore the console to whatever the daytime schedule
 # wants at that moment (afternoon hold, focus scene, evening gold, or off)
 # instead of a hard power-off — see console_schedule.py.
-CONSOLE_SCHEDULE_PY = "~/.openclaw/workspace/Skills/govee-lights/scripts/console_schedule.py"
+CONSOLE_SCHEDULE_PY = os.path.expanduser("~/.openclaw/workspace/Skills/govee-lights/scripts/console_schedule.py")
 LIGHT = "console_light"
 LEAD_MINUTES = 3       # turn the light on this many minutes before the call starts
 BRIGHTNESS = "20"      # low — the strip head is partly in the user's camera frame,

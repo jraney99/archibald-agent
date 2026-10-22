@@ -18,8 +18,9 @@
  */
 
 import { readFileSync } from "node:fs";
+import os from "node:os";
 
-const OPENCLAW_DIR = "~/.openclaw";
+const OPENCLAW_DIR = `${os.homedir()}/.openclaw`;
 const RULES_DIR = "Documentation/rules";
 const HOUR = 60 * 60 * 1000;
 

@@ -63,7 +63,7 @@ SCOPE = "https://www.googleapis.com/auth/sdm.service"
 REDIRECT_URI = "https://www.google.com"
 # Matches RUNTIME in shared/test_data_layout.py: the deployment's own credential
 # file is the one path a script may name.
-OPENCLAW_JSON = Path("~/.openclaw/openclaw.json")
+OPENCLAW_JSON = Path(os.path.expanduser("~/.openclaw/openclaw.json")).expanduser()
 
 SECRETS = ("NEST_PROJECT_ID", "NEST_CLIENT_ID", "NEST_CLIENT_SECRET", "NEST_REFRESH_TOKEN")
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Fixes up externally-organized calendar invites (Calendly bookings, invites
+import os
 from other people) to match the user's calendar conventions:
 
 1. Missing reminder override (relying on Google's useDefault) — fixed
@@ -26,14 +27,14 @@ from pathlib import Path
 
 import anthropic
 
-sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
 from send_inline_proposal import send as send_proposal  # noqa: E402
 from usage_logger import log_usage  # noqa: E402
 
 GOG       = "/opt/homebrew/bin/gog"
 ACCOUNT   = "owner@example.com"
-PENDING   = Path("~/.openclaw/pending_cal_rename.json")
-SEEN_FILE = Path("~/.openclaw/cal_rename_seen.json")
+PENDING   = Path(os.path.expanduser("~/.openclaw/pending_cal_rename.json")).expanduser()
+SEEN_FILE = Path(os.path.expanduser("~/.openclaw/cal_rename_seen.json")).expanduser()
 
 FORMAT_PROMPT = """You are formatting a Google Calendar event title to match a personal convention.
 

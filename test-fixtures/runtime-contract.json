@@ -1,0 +1,25 @@
+{
+ "packageVersion": "2026.6.10",
+ "files": [
+  {
+   "path": "dist/agent-tools.before-tool-call-CDuA0_mC.js",
+   "sha256": "00671177bfe60da7b4b9ce3a7196bee4479fd7509e5a934a7e138716bdb17e75"
+  },
+  {
+   "path": "dist/dispatch-B2e1grFo.js",
+   "sha256": "bc6a6ea4fd84b776ff60c68e6231a5029706ad60b72447ea3aad97b6a348003e"
+  },
+  {
+   "path": "dist/selection-BfRwHcjH.js",
+   "sha256": "65595be80f8315122a77a4ae44a31d446c7b8ef70d6506b7d099074f72715750"
+  },
+  {
+   "path": "dist/lifecycle-hook-helpers-v00PVIlh.js",
+   "sha256": "e05def22c55b20728ed9b301e3bc8133a9c37888ee5536da6dca2960fadab0a6"
+  },
+  {
+   "path": "dist/embedded-agent-BgF2MOkH.js",
+   "sha256": "450a2a9e107227cd5d4b21c01d365a1e3d95f5c6024a813ff4a082ee33929e88"
+  }
+ ]
+}

@@ -7,10 +7,11 @@ Usage: python3 send_proposal.py /path/to/pending.json
 The pending file must contain a "proposal_text" field.
 On success, "source_tg_msg_id" is written back into the same file.
 """
+import os
 import json, sys, urllib.request
 from pathlib import Path
 
-TG_TOKEN   = __import__("runpy").run_path("~/.openclaw/workspace/Skills/shared/runtime_secrets.py")["require_secret"]("TELEGRAM_BOT_TOKEN")
+TG_TOKEN   = __import__("runpy").run_path(os.path.expanduser("~/.openclaw/workspace/Skills/shared/runtime_secrets.py"))["require_secret"]("TELEGRAM_BOT_TOKEN")
 TG_CHAT_ID = "1000000001"
 
 if len(sys.argv) < 2:

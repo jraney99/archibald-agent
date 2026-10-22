@@ -7,6 +7,7 @@ Every subject below is a real subject from the user's mailbox that the policy
 misread before 2026-09-15 (most were archived by broad filters and classified
 "unknown", so nothing guaranteed they would ever surface).
 """
+import os
 import json
 import re
 import tempfile
@@ -18,7 +19,7 @@ from unittest.mock import patch
 import email_policy as policy
 from statement_email_rules import RULES, gmail_query, identify_provider
 
-FINANCE_SCRIPTS = Path("~/.openclaw/workspace/Skills/afrexai-personal-finance/scripts")
+FINANCE_SCRIPTS = Path(os.path.expanduser("~/.openclaw/workspace/Skills/afrexai-personal-finance/scripts")).expanduser()
 
 
 class TestSecurityClass(unittest.TestCase):

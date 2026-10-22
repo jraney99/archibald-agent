@@ -20,6 +20,7 @@ MODE (arrival_filing.json): "watch" decides and logs but changes nothing;
 """
 from __future__ import annotations
 
+import os
 import json
 import re
 import time
@@ -30,7 +31,7 @@ import refile_rules as rr
 
 SKILL = Path(__file__).resolve().parent.parent
 CONFIG = SKILL / "arrival_filing.json"
-LOG = Path("~/.openclaw/logs/arrival_filing.jsonl")
+LOG = Path(os.path.expanduser("~/.openclaw/logs/arrival_filing.jsonl")).expanduser()
 DEFAULT_MODE = "watch"
 
 LOW_PRIORITY = "Low Priority"

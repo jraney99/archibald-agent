@@ -22,6 +22,7 @@ Pure module: no network or disk access at import time.
 """
 from __future__ import annotations
 
+import os
 import json
 import re
 import time
@@ -34,7 +35,7 @@ import email_policy as policy
 # The ledger lives in its own file, NOT the daemon state file: the daemon
 # rewrites its state many times a minute, and carrying a growing dataset in it
 # would rewrite hundreds of KB every time.
-LEDGER_FILE = Path("~/.openclaw/sender_ledger.json")
+LEDGER_FILE = Path(os.path.expanduser("~/.openclaw/sender_ledger.json")).expanduser()
 MIN_OBSERVATIONS = 3      # a one-off, or a single burst, is not a pattern
 MIN_SPAN_DAYS = 7         # …and it has to span real time, not one busy morning
 MAX_ENTRIES = 400

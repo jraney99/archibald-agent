@@ -25,7 +25,7 @@ from typing import Any, Optional
 import requests
 
 API_BASE = "https://openapi.api.govee.com/router/api/v1"
-OPENCLAW_JSON = Path("~/.openclaw/openclaw.json")
+OPENCLAW_JSON = Path(os.path.expanduser("~/.openclaw/openclaw.json")).expanduser()
 
 # Govee's cloud/device link drops transient blips ("Device is offline")
 # even when the physical light is on and reachable seconds later. Without a

@@ -22,7 +22,7 @@ from pathlib import Path
 
 from hatch_rest_api import get_rest_devices
 
-OPENCLAW_JSON = Path("~/.openclaw/openclaw.json")
+OPENCLAW_JSON = Path(os.path.expanduser("~/.openclaw/openclaw.json")).expanduser()
 DEVICES_CONFIG = Path(__file__).resolve().parent.parent / "config" / "devices.json"
 
 # Seconds to wait after connecting for the device to publish its initial

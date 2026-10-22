@@ -1,0 +1,547 @@
+{
+  "_comment": "Source of truth for confirm:*/skip:* Telegram button dispatch. argv[0] is relative to the skills directory (skills/ in this repo). reply: 'script' = run + relay stdout unless it is exactly NO_REPLY (script edits its own message); 'report' = run + relay stdout; any other string = literal reply text after running argv/unlink. unlink path is relative to ~/.openclaw.",
+  "exact": {
+    "confirm:putting": {
+      "argv": [
+        "golf-putting/scripts/log_putting.py",
+        "--done"
+      ],
+      "reply": "script"
+    },
+    "skip:putting": {
+      "argv": [
+        "golf-putting/scripts/log_putting.py",
+        "--skip"
+      ],
+      "reply": "script"
+    },
+    "confirm:email": {
+      "reply": "This older button is not bound to a draft. Ask Archibald to show the email proposal again."
+    },
+    "skip:email": {
+      "reply": "This older button is not bound to a draft. Ask Archibald to show the email proposal again."
+    },
+    "confirm:crm": {
+      "argv": [
+        "email-monitor/scripts/confirm_crm_email.py"
+      ],
+      "reply": "script"
+    },
+    "skip:crm": {
+      "argv": [
+        "email-monitor/scripts/cancel_crm_email.py"
+      ],
+      "reply": "script"
+    },
+    "confirm:cal": {
+      "reply": "This older button is not bound to an event. Ask Archibald to show the calendar proposal again."
+    },
+    "skip:cal": {
+      "reply": "This older button is not bound to an event. Ask Archibald to show the calendar proposal again."
+    },
+    "confirm:calrename": {
+      "argv": [
+        "email-monitor/scripts/confirm_cal_rename.py"
+      ],
+      "reply": "script",
+      "timeoutMs": 45000
+    },
+    "skip:calrename": {
+      "argv": [
+        "email-monitor/scripts/skip_cal_rename.py"
+      ],
+      "reply": "script"
+    },
+    "confirm:meals": {
+      "argv": [
+        "reminders/scripts/log_meals.py"
+      ],
+      "reply": "script"
+    },
+    "skip:meals": {
+      "reply": "Skipped. 🎩"
+    },
+    "confirm:booking": {
+      "argv": [
+        "restaurant-booking/scripts/confirm_booking.py"
+      ],
+      "reply": "script",
+      "timeoutMs": 120000
+    },
+    "skip:booking": {
+      "argv": [
+        "shared/skip_proposal.py",
+        "--pending",
+        "~/.openclaw/pending_restaurant_booking.json",
+        "--text",
+        "Skipped. 🎩"
+      ],
+      "reply": "script"
+    },
+    "confirm:cancelbooking": {
+      "argv": [
+        "restaurant-booking/scripts/cancel_booking.py",
+        "confirm"
+      ],
+      "reply": "script",
+      "timeoutMs": 120000
+    },
+    "skip:cancelbooking": {
+      "argv": [
+        "shared/skip_proposal.py",
+        "--pending",
+        "~/.openclaw/pending_restaurant_cancel.json",
+        "--text",
+        "Kept. 🎩"
+      ],
+      "reply": "script"
+    },
+    "confirm:golfbooking": {
+      "argv": [
+        "golf-booking/scripts/confirm_booking.py"
+      ],
+      "reply": "script",
+      "timeoutMs": 300000
+    },
+    "skip:golfbooking": {
+      "argv": [
+        "shared/skip_proposal.py",
+        "--pending",
+        "~/.openclaw/workspace/Skills/golf-booking/state/pending_golf_booking.json",
+        "--text",
+        "Skipped. 🎩"
+      ],
+      "reply": "script"
+    },
+    "confirm:filter": {
+      "argv": [
+        "email-monitor/scripts/confirm_filter.py"
+      ],
+      "reply": "script",
+      "timeoutMs": 30000
+    },
+    "skip:filter": {
+      "argv": [
+        "email-monitor/scripts/skip_filter.py"
+      ],
+      "reply": "script"
+    },
+    "confirm:unsub": {
+      "argv": [
+        "email-monitor/scripts/confirm_unsub.py"
+      ],
+      "reply": "script",
+      "timeoutMs": 30000
+    },
+    "skip:unsub": {
+      "argv": [
+        "email-monitor/scripts/skip_unsub.py"
+      ],
+      "reply": "script"
+    },
+    "confirm:chilipad-maint": {
+      "argv": [
+        "chilipad/scripts/maintenance.py",
+        "--done"
+      ],
+      "reply": "script"
+    },
+    "skip:chilipad-maint": {
+      "argv": [
+        "chilipad/scripts/maintenance.py",
+        "--snooze"
+      ],
+      "reply": "script"
+    },
+    "confirm:chilipad-rate-good": {
+      "argv": [
+        "chilipad/scripts/rate_prompt.py",
+        "--rate",
+        "good"
+      ],
+      "reply": "script"
+    },
+    "confirm:chilipad-rate-hot": {
+      "argv": [
+        "chilipad/scripts/rate_prompt.py",
+        "--rate",
+        "hot"
+      ],
+      "reply": "script"
+    },
+    "confirm:chilipad-rate-cold": {
+      "argv": [
+        "chilipad/scripts/rate_prompt.py",
+        "--rate",
+        "cold"
+      ],
+      "reply": "script"
+    }
+  },
+  "patterns": [
+    {
+      "re": "^confirm:outfit-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_callback.py",
+        "--id",
+        "$1",
+        "--action",
+        "planned"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^skip:outfit-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_callback.py",
+        "--id",
+        "$1",
+        "--action",
+        "skip"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^confirm:outfitworn-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_callback.py",
+        "--id",
+        "$1",
+        "--action",
+        "worn"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^skip:outfitworn-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_callback.py",
+        "--id",
+        "$1",
+        "--action",
+        "not-worn"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^outfit:alt-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_callback.py",
+        "--id",
+        "$1",
+        "--action",
+        "alternate"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^outfit:formal-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_callback.py",
+        "--id",
+        "$1",
+        "--action",
+        "too-formal"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^outfit:casual-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_callback.py",
+        "--id",
+        "$1",
+        "--action",
+        "too-casual"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^outfit:warm-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_callback.py",
+        "--id",
+        "$1",
+        "--action",
+        "too-warm"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^outfit:cold-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_callback.py",
+        "--id",
+        "$1",
+        "--action",
+        "too-cold"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^outfit:unavail-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_callback.py",
+        "--id",
+        "$1",
+        "--action",
+        "unavailable"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^outfit:swap-([a-f0-9]{12})-(top|bottoms|shoes)$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_callback.py",
+        "--id",
+        "$1",
+        "--action",
+        "swap-$2"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^confirm:closetadd-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/closet_addition_callback.py",
+        "--id",
+        "$1",
+        "--answer",
+        "add"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^skip:closetadd-([a-f0-9]{12})-(return|notclothing)$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/closet_addition_callback.py",
+        "--id",
+        "$1",
+        "--answer",
+        "$2"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^confirm:wearphoto-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/wear_photo_callback.py",
+        "--id",
+        "$1",
+        "--answer",
+        "log"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^skip:wearphoto-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/wear_photo_callback.py",
+        "--id",
+        "$1",
+        "--answer",
+        "notquite"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^outfit:never-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_callback.py",
+        "--id",
+        "$1",
+        "--action",
+        "never"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^confirm:outfitwho-([a-f0-9]{12})-(biz|date|fam|friend)$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_questions.py",
+        "answer",
+        "--id",
+        "$1",
+        "--value",
+        "$2"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^confirm:outfitvenue-([a-f0-9]{12})-(yes|no)$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_questions.py",
+        "answer",
+        "--id",
+        "$1",
+        "--value",
+        "$2"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^confirm:outfitrule-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/rule_proposals.py",
+        "resolve",
+        "--id",
+        "$1",
+        "--answer",
+        "accept"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^skip:outfitrule-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/rule_proposals.py",
+        "resolve",
+        "--id",
+        "$1",
+        "--answer",
+        "decline"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^confirm:email-([a-f0-9]{32})$",
+      "argv": [
+        "email-monitor/scripts/send_pending.py",
+        "--approval-id",
+        "$1",
+        "--from-callback"
+      ],
+      "reply": "script",
+      "timeoutMs": 45000
+    },
+    {
+      "re": "^skip:email-([a-f0-9]{32})$",
+      "argv": [
+        "email-monitor/scripts/cancel_pending_email.py",
+        "--approval-id",
+        "$1"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^confirm:cal-([a-f0-9]{32})$",
+      "argv": [
+        "email-monitor/scripts/confirm_cal_event.py",
+        "--approval-id",
+        "$1"
+      ],
+      "reply": "script",
+      "timeoutMs": 60000
+    },
+    {
+      "re": "^skip:cal-([a-f0-9]{32})$",
+      "argv": [
+        "email-monitor/scripts/skip_cal.py",
+        "--approval-id",
+        "$1"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^confirm:loopclose-([a-z0-9]+)$",
+      "argv": [
+        "loop-closer/scripts/loop_closer.py",
+        "close",
+        "--id",
+        "$1",
+        "--resolution",
+        "done"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^skip:loopclose-([a-z0-9]+)$",
+      "argv": [
+        "loop-closer/scripts/loop_closer.py",
+        "keep-open",
+        "--id",
+        "$1"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^confirm:pindigest-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/pinterest_digest_callback.py",
+        "--id",
+        "$1",
+        "--answer",
+        "add"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^skip:pindigest-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/pinterest_digest_callback.py",
+        "--id",
+        "$1",
+        "--answer",
+        "skip"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^confirm:pinwatch-([a-f0-9]{12})-([0-9])$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/pinterest_digest_callback.py",
+        "--id",
+        "$1",
+        "--answer",
+        "watch",
+        "--n",
+        "$2"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^confirm:fit-([a-f0-9]{12})-(great|ok|poor)$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/fit_callback.py",
+        "--id",
+        "$1",
+        "--answer",
+        "$2"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^outfit:menu-([a-f0-9]{12})-(main|swap|wrong)$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/outfit_callback.py",
+        "--id",
+        "$1",
+        "--action",
+        "menu-$2"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^confirm:find-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/find_feedback.py",
+        "--id",
+        "$1",
+        "--answer",
+        "like"
+      ],
+      "reply": "script"
+    },
+    {
+      "re": "^skip:find-([a-f0-9]{12})$",
+      "argv": [
+        "ai-wardrobe-steward/scripts/find_feedback.py",
+        "--id",
+        "$1",
+        "--answer",
+        "dislike"
+      ],
+      "reply": "script"
+    }
+  ]
+}

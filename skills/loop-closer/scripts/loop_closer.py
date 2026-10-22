@@ -30,6 +30,7 @@ Commands:
 Only 🚨-marked bullets are managed here. Plain pending items are untouched —
 this skill is for the ones already important enough to be flagged critical.
 """
+import os
 import argparse
 import hashlib
 import json
@@ -43,8 +44,8 @@ from pending_proposal import edit_or_fallback  # noqa: E402
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "to-do" / "scripts"))
 import todo as commitments_store  # noqa: E402
 
-MEMORY_PATH = Path("~/.openclaw/workspace/MEMORY.md")
-STATE_PATH = Path("~/.openclaw/loop_closer_state.json")
+MEMORY_PATH = Path(os.path.expanduser("~/.openclaw/workspace/MEMORY.md")).expanduser()
+STATE_PATH = Path(os.path.expanduser("~/.openclaw/loop_closer_state.json")).expanduser()
 
 SECTION_HEADER = "## Pending Actions"
 RESOLVED_HEADER = "## Resolved (Loop Closer)"

@@ -12,18 +12,19 @@ send it correctly via send_pending.py.
 Runs every 2 minutes via system crontab.
 State: ~/.openclaw/email_monitor_state.json
 """
+import os
 import json, subprocess, sys
 from pathlib import Path
 from typing import Optional
 
-sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
 from usage_logger import log_usage
 
-TG_TOKEN   = __import__("runpy").run_path("~/.openclaw/workspace/Skills/shared/runtime_secrets.py")["require_secret"]("TELEGRAM_BOT_TOKEN")
+TG_TOKEN   = __import__("runpy").run_path(os.path.expanduser("~/.openclaw/workspace/Skills/shared/runtime_secrets.py"))["require_secret"]("TELEGRAM_BOT_TOKEN")
 TG_CHAT_ID = "1000000001"
 API_KEY    = "REDACTED"
 MODEL      = "claude-sonnet-4-6"
-STATE_FILE = "~/.openclaw/email_monitor_state.json"
+STATE_FILE = os.path.expanduser("~/.openclaw/email_monitor_state.json")
 
 GRAMMAR_PROMPT = """\
 You are a grammar, spelling, and punctuation corrector. The user sends you a voice-dictated
@@ -114,7 +115,7 @@ def main() -> None:
                 arg = "--latest"
             proc = subprocess.run(
                 ["python3", "-W", "ignore",
-                 "~/.openclaw/workspace/Skills/email-monitor/scripts/send_pending.py",
+                 os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/scripts/send_pending.py"),
                  arg],
                 capture_output=True, text=True, timeout=60,
             )

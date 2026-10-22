@@ -1,11 +1,12 @@
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import { isOwnerMessage } from './owner.mjs';
+import os from "node:os";
 
 const digest = text => createHash('sha256').update(String(text ?? ''), 'utf8').digest('hex');
 const pendingDigests = new Set();
 
-export function intakeArgv(event, context, config, root = '~/.openclaw') {
+export function intakeArgv(event, context, config, root = path.join(os.homedir(), '.openclaw')) {
   const ctx = event?.ctx ?? {};
   const inbound = { channel: ctx.OriginatingChannel ?? ctx.Surface ?? ctx.Provider,
     senderId: ctx.SenderId, sessionKey: ctx.SessionKey,

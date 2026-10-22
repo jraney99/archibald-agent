@@ -1,0 +1,1 @@
+{"_comment": "Guards whose refusal text is still a procedure rather than a runnable command. Each entry is a known cost leak: a blocked action here turns into exploratory turns. The list may only shrink — see test_guards_name_a_command.py."}

@@ -19,6 +19,7 @@ Usage:
     python3 create_recurring_reminder.py --text "Change toothbrush" --every 45d
     python3 create_recurring_reminder.py --text "Replace water filter" --cron "0 9 9 2,8 *"
 """
+import os
 import argparse
 import json
 import re
@@ -26,12 +27,12 @@ import subprocess
 import sys
 import time
 
-sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
 from current_location import get_tz_name  # noqa: E402
 
 OPENCLAW_BIN = "/opt/homebrew/bin/openclaw"
 TG_CHAT_ID = "1000000001"
-SEND_TELEGRAM = "~/.openclaw/workspace/Skills/shared/send_telegram.py"
+SEND_TELEGRAM = os.path.expanduser("~/.openclaw/workspace/Skills/shared/send_telegram.py")
 
 
 def slugify(text: str) -> str:

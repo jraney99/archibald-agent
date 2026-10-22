@@ -19,6 +19,7 @@ timeoutSeconds comfortably above that.
 Usage:
     python3 travel_wake_nudge.py --message "..." [--repeats 3] [--interval-seconds 240]
 """
+import os
 import argparse
 import json
 import sys
@@ -26,10 +27,10 @@ import time
 import urllib.request
 from pathlib import Path
 
-TG_TOKEN = __import__("runpy").run_path("~/.openclaw/workspace/Skills/shared/runtime_secrets.py")["require_secret"]("TELEGRAM_BOT_TOKEN")
+TG_TOKEN = __import__("runpy").run_path(os.path.expanduser("~/.openclaw/workspace/Skills/shared/runtime_secrets.py"))["require_secret"]("TELEGRAM_BOT_TOKEN")
 TG_CHAT_ID = "1000000001"
 
-SESSIONS_FILE = Path("~/.openclaw/agents/main/sessions/sessions.json")
+SESSIONS_FILE = Path(os.path.expanduser("~/.openclaw/agents/main/sessions/sessions.json")).expanduser()
 TELEGRAM_SESSION_KEY = "agent:main:telegram:direct:1000000001"
 
 

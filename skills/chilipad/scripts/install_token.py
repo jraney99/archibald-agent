@@ -30,7 +30,7 @@ import sys
 import time
 from pathlib import Path
 
-OPENCLAW_JSON = Path("~/.openclaw/openclaw.json")
+OPENCLAW_JSON = Path(os.path.expanduser("~/.openclaw/openclaw.json")).expanduser()
 KEY = "SLEEPME_API_TOKEN"
 
 

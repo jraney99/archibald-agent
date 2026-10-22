@@ -28,6 +28,7 @@ the daemon's test suite can load it by path.
 """
 from __future__ import annotations
 
+import os
 import base64
 import json
 import re
@@ -37,7 +38,7 @@ from typing import Optional
 
 import email_policy
 
-OPENCLAW = Path("~/.openclaw")
+OPENCLAW = Path(os.path.expanduser("~/.openclaw")).expanduser()
 _SKILL_DIR = Path(__file__).resolve().parent.parent
 CONFIG_FILE = _SKILL_DIR / "senders.json"
 LEARNED_FILE = _SKILL_DIR / "learned_senders.json"

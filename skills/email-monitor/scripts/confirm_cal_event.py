@@ -3,16 +3,17 @@
 Confirm a pending calendar event proposal.
 Called by Archibald when user taps ✅ (confirm:cal) on a daemon proposal.
 """
+import os
 import json, subprocess, sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
-sys.path.insert(0, "~/.openclaw/workspace/Skills/email-monitor/scripts")
-sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/scripts"))
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
 from approval import require_cli, finish
 
-CAL_FILE       = Path("~/.openclaw/pending_cal_event.json")
-CAL_QUEUE_FILE = Path("~/.openclaw/pending_cal_queue.json")
+CAL_FILE       = Path(os.path.expanduser("~/.openclaw/pending_cal_event.json")).expanduser()
+CAL_QUEUE_FILE = Path(os.path.expanduser("~/.openclaw/pending_cal_queue.json")).expanduser()
 GOG      = "/opt/homebrew/bin/gog"
 EMAIL    = "owner@example.com"
 
@@ -284,7 +285,7 @@ def _maybe_upgrade_flight_reminders(gog_events: list) -> None:
     if not matches:
         return
 
-    sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+    sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
     try:
         from drive_time import geocode
         coords = geocode(checkin["location"])

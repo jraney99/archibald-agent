@@ -28,7 +28,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-FILE = Path("~/.openclaw/workspace/memory/domains/standing-instructions.md")
+FILE = Path(os.path.expanduser("~/.openclaw/workspace/memory/domains/standing-instructions.md")).expanduser()
 TOPICS = ("calendar", "email", "finance", "health", "home", "wardrobe", "travel", "general")
 HEADER = ("# Standing Instructions\n\n"
           "The user's own words, saved by `Skills/shared/remember.py` when he gives an instruction meant to hold\n"

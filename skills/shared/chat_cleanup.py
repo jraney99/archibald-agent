@@ -49,6 +49,7 @@ CLI:
 """
 from __future__ import annotations
 
+import os
 import argparse
 import fcntl
 import json
@@ -60,7 +61,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-OPENCLAW = Path("~/.openclaw")
+OPENCLAW = Path(os.path.expanduser("~/.openclaw")).expanduser()
 STATE_PATH = OPENCLAW / "chat_cleanup_state.json"
 ARCHIVE_DIR = OPENCLAW / "telegram_archive"
 TZ = ZoneInfo("America/Chicago")

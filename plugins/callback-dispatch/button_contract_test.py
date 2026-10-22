@@ -29,7 +29,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 # OPENCLAW_DIR lets a scratch copy of the plugin (mutation checks) still scan the real senders.
 OPENCLAW = Path(os.environ.get("OPENCLAW_DIR") or HERE.parent.parent)
-SKILLS = OPENCLAW / "workspace" / "Skills"
+SKILLS = OPENCLAW / "skills"
 TABLE = json.loads((HERE / "dispatch-table.json").read_text())
 
 SKIP_PARTS = ("node_modules", "/tests/", "/test_", ".test.", "run_eval", "__pycache__", "/references/")
@@ -45,21 +45,8 @@ SAMPLES = ["4b7e3309d908", "0123456789abcdef01234567", "0123456789abcdef01234567
 # not just one. (file, constant, how to turn the constant into the enumerated values)
 flat = lambda rows: [s for row in rows for s in row]
 ENUMERATIONS = {
-    "confirm:meal-{today}-{slot}-{choice}": ("nutrition/scripts/send_meal_reminder.py", "SLOT_CHOICE_BUTTONS",
-                                             lambda c: [f"confirm:meal-2026-09-19-{slot}-{choice}" for slot, row in c.items() for _, choice in row]),
-    "confirm:supp-{due_at.date().isoformat()}-between-{slug(s)}": (
-        "nutrition/scripts/send_supplement_nudge.py", "BETWEEN_SLUGS",
-        lambda c: [f"confirm:supp-2026-10-12-between-{name}" for name in c]),
-    "confirm:txnctx-{txn_id}-{s}": ("shared/txn_context.py", "CONTEXTS",
-                                    lambda c: [f"confirm:txnctx-0000000000000001-{s}" for s in c]),
-    "confirm:txncat-{entry['id']}-{s}": ("afrexai-personal-finance/scripts/finance_txn_watch.py", "BUTTON_ROWS",
-                                         lambda c: [f"confirm:txncat-0000000000000001-{s}" for s in flat(c)]),
-    "confirm:inflow-{row_id}-{letter}{n}": ("afrexai-personal-finance/scripts/finance_deposit_question.py", "STAGE_LETTER",
-                                            lambda c: [f"confirm:inflow-0000000000000001-{letter}0" for letter in c.values()]),
-    "confirm:p2pcat-{entry['id']}-{s}": ("afrexai-personal-finance/scripts/finance_p2p_watch.py", ("IN_BUTTON_ROWS", "OUT_BUTTON_ROWS"),
-                                         lambda c: [f"confirm:p2pcat-0000000000000001-{s}" for s in flat(c)]),
-    "confirm:transfercat-{entry['id']}-{s}": ("afrexai-personal-finance/scripts/finance_transfer_watch.py", ("IN_BUTTON_ROWS", "OUT_BUTTON_ROWS"),
-                                              lambda c: [f"confirm:transfercat-0000000000000001-{s}" for s in flat(c)]),
+    # The deployment lists its enumerated senders here (meal choices, transaction
+    # categories, ...). None of those senders are published in this repository.
 }
 
 # `confirm:{action_type}` is filled at call sites; each real action type must be handled.
@@ -68,6 +55,7 @@ ACTION_TYPE_CALL = re.compile(r"""(?:--action-type["',\s=]+|_tg_send_with_button
 # Dormant on purpose — say why, or delete the code.
 DORMANT_ACTION_TYPES = {
     "uv": "email daemon still has the UV-window proposal path, but nothing in the repo writes pending_uv_event.json any more, so it can never be sent",
+    "equipment": "appears only in send_inline_proposal.py's usage example; the skill that sends it is not published in this repository",
 }
 # An approval id is appended to these before sending (daemon._tg_send_with_buttons).
 APPROVAL_SUFFIXED = {"email": "0123456789abcdef0123456789abcdef", "cal": "0123456789abcdef0123456789abcdef"}

@@ -11,15 +11,15 @@ from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
-TOKEN_FILE  = "~/.openclaw/gmail_monitor_token.json"
-STATE_FILE  = "~/.openclaw/email_monitor_state.json"
+TOKEN_FILE  = os.path.expanduser("~/.openclaw/gmail_monitor_token.json")
+STATE_FILE  = os.path.expanduser("~/.openclaw/email_monitor_state.json")
 SCOPES      = [
     "https://www.googleapis.com/auth/gmail.modify",
     "https://www.googleapis.com/auth/gmail.settings.basic",
     "https://www.googleapis.com/auth/calendar.readonly",
 ]
 MY_EMAIL    = "owner@example.com"
-TG_TOKEN    = __import__("runpy").run_path("~/.openclaw/workspace/Skills/shared/runtime_secrets.py")["require_secret"]("TELEGRAM_BOT_TOKEN")
+TG_TOKEN    = __import__("runpy").run_path(os.path.expanduser("~/.openclaw/workspace/Skills/shared/runtime_secrets.py"))["require_secret"]("TELEGRAM_BOT_TOKEN")
 TG_CHAT_ID  = "1000000001"
 API_KEY     = "REDACTED"
 MODEL       = "claude-sonnet-4-6"

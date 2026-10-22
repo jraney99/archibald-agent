@@ -11,15 +11,16 @@ this is the only way the calculator ever learns about it.
 Reuses the same cancel-and-reschedule path set_trip_lodging.py uses for a
 manually-told lodging update.
 """
+import os
 import argparse, json, sys
 from datetime import datetime
 from pathlib import Path
 
-sys.path.insert(0, "~/.openclaw/workspace/Skills/email-monitor/scripts")
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/scripts"))
 
 GOG     = "/opt/homebrew/bin/gog"
 EMAIL   = "owner@example.com"
-PENDING = Path("~/.openclaw/pending_checked_bag.json")
+PENDING = Path(os.path.expanduser("~/.openclaw/pending_checked_bag.json")).expanduser()
 
 
 def main():

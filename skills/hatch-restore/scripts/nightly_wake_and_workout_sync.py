@@ -55,7 +55,7 @@ DEFAULT_BREAKFAST_AFTER_WAKE_MIN = 30
 # send_meal_reminder.py reads it for the "by H:MM" line and so its static
 # backstop doesn't pre-empt a later one-shot; refresh_breakfast_anchor.py
 # reads it to tell whether the live Hatch alarm has moved since.
-BREAKFAST_PLAN_FILE = Path("~/.openclaw/breakfast_anchor_plan.json")
+BREAKFAST_PLAN_FILE = Path(os.path.expanduser("~/.openclaw/breakfast_anchor_plan.json")).expanduser()
 
 RUN_MORNING_BRIEFING = SCRIPTS_DIR.parent.parent / "morning-briefing" / "scripts" / "run_morning_briefing.py"
 BRIEFING_JOB_PREFIX = "morning-briefing-at-wake-"
@@ -78,7 +78,7 @@ from misfire_guard import within_slot  # noqa: E402  (sync_alarm put shared/ on 
 # evening slot; a real 21:00 fire the next night is unaffected.
 MISFIRE_SLOT = (19, 24)  # [hour_lo, hour_hi) local, must not cross midnight
 
-TG_TOKEN = __import__("runpy").run_path("~/.openclaw/workspace/Skills/shared/runtime_secrets.py")["require_secret"]("TELEGRAM_BOT_TOKEN")
+TG_TOKEN = __import__("runpy").run_path(os.path.expanduser("~/.openclaw/workspace/Skills/shared/runtime_secrets.py"))["require_secret"]("TELEGRAM_BOT_TOKEN")
 TG_CHAT_ID = "1000000001"
 
 OPENCLAW_BIN = "/opt/homebrew/bin/openclaw"

@@ -19,17 +19,18 @@ made (e.g. no stored message id), so nothing is silently dropped.
 Usage:
     python3 log_meals.py
 """
+import os
 import json
 import sys
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-sys.path.insert(0, str(Path("~/.openclaw/workspace/Skills/shared")))
+sys.path.insert(0, str(Path(os.path.expanduser("~/.openclaw/workspace/Skills/shared")).expanduser()))
 from pending_proposal import load_message_id, edit_or_fallback  # noqa: E402
 
-LOG_PATH = Path("~/.openclaw/meals_log.json")
-STATE_PATH = Path("~/.openclaw/freezer_meals_reminder_state.json")
+LOG_PATH = Path(os.path.expanduser("~/.openclaw/meals_log.json")).expanduser()
+STATE_PATH = Path(os.path.expanduser("~/.openclaw/freezer_meals_reminder_state.json")).expanduser()
 TZ = ZoneInfo("America/Chicago")
 
 

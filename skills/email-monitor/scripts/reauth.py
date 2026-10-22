@@ -6,6 +6,7 @@ took whichever glob() returned first. This one uses the client the current token
 (same client_id), or the file named with --client-file (for example after creating a new OAuth
 client). The token is written 0600 before it has content. 2026-10-02.
 """
+import os
 import argparse
 import json
 import sys
@@ -13,7 +14,7 @@ from pathlib import Path
 
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-HOME = Path("~/.openclaw")
+HOME = Path(os.path.expanduser("~/.openclaw")).expanduser()
 sys.path.insert(0, str(HOME / "workspace/Skills/shared"))
 from gmail_token import write_private  # noqa: E402
 

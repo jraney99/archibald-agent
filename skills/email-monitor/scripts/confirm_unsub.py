@@ -11,17 +11,18 @@ Reads ~/.openclaw/pending_unsub.json and:
 Idempotent: a second tap after the filter exists just reports it's already set.
 Prints a one-line confirmation for the callback-dispatch plugin to relay.
 """
+import os
 import json
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import sender_filter as sf
-sys.path.insert(0, str(Path("~/.openclaw/workspace/Skills/shared")))
+sys.path.insert(0, str(Path(os.path.expanduser("~/.openclaw/workspace/Skills/shared")).expanduser()))
 from pending_proposal import load_message_id, edit_or_fallback  # noqa: E402
 
-PENDING = Path("~/.openclaw/pending_unsub.json")
-STATE = Path("~/.openclaw/email_monitor_state.json")
+PENDING = Path(os.path.expanduser("~/.openclaw/pending_unsub.json")).expanduser()
+STATE = Path(os.path.expanduser("~/.openclaw/email_monitor_state.json")).expanduser()
 
 
 def _load_state() -> dict:

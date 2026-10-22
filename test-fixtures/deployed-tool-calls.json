@@ -1,0 +1,132 @@
+{
+  "formatVersion": 1,
+  "capturedFrom": "Persisted native session toolCall blocks, not synthetic inspector inputs.",
+  "fixtures": [
+    {
+      "id": "deployed-exec",
+      "source": {
+        "file": "a23527f3-0e4d-45d0-b688-51dde2cb9d1a.jsonl",
+        "line": 6,
+        "timestamp": "2026-09-14T12:31:59.308Z",
+        "toolCallSha256": "94601f3dbb58ae8c9c5a05ee3d94f5ad4a716c2d277aa887075b47199bdc5ff9",
+        "redactions": "IDs, paths, command and document text replaced; keys, scalar types and array cardinality preserved."
+      },
+      "observedShape": {
+        "type": "str",
+        "id": "str",
+        "name": "str",
+        "arguments": {
+          "command": "str"
+        }
+      },
+      "toolCall": {
+        "type": "toolCall",
+        "id": "sanitized-exec",
+        "name": "exec",
+        "arguments": {
+          "command": "printf fixture"
+        }
+      }
+    },
+    {
+      "id": "deployed-write",
+      "source": {
+        "file": "3292493a-6782-4e32-bf77-1f2afa133975.jsonl",
+        "line": 59,
+        "timestamp": "2026-09-13T23:06:51.385Z",
+        "toolCallSha256": "9f07cd7c64d52a30ed97ff6a2dbdcc5d432fadb6e5d9804e4ff7fdda59602a47",
+        "redactions": "IDs, paths, command and document text replaced; keys, scalar types and array cardinality preserved."
+      },
+      "observedShape": {
+        "type": "str",
+        "id": "str",
+        "name": "str",
+        "arguments": {
+          "path": "str",
+          "content": "str"
+        }
+      },
+      "toolCall": {
+        "type": "toolCall",
+        "id": "sanitized-write",
+        "name": "write",
+        "arguments": {
+          "path": "/fixture/workspace/notes.md",
+          "content": "## Fixture\nSanitized text.\n"
+        }
+      }
+    },
+    {
+      "id": "deployed-edit",
+      "source": {
+        "file": "49ed1399-61bf-4449-b1f6-6b9283ac17ff.jsonl",
+        "line": 54,
+        "timestamp": "2026-08-25T21:48:50.711Z",
+        "toolCallSha256": "78f71e1bc164a659d3f003e15c33622cf5439b1d9ca546daf0030b111a5689fb",
+        "redactions": "IDs, paths, command and document text replaced; keys, scalar types and array cardinality preserved."
+      },
+      "observedShape": {
+        "type": "str",
+        "id": "str",
+        "name": "str",
+        "arguments": {
+          "path": "str",
+          "edits": [
+            {
+              "oldText": "str",
+              "newText": "str"
+            },
+            {
+              "oldText": "str",
+              "newText": "str"
+            }
+          ]
+        }
+      },
+      "toolCall": {
+        "type": "toolCall",
+        "id": "sanitized-edit",
+        "name": "edit",
+        "arguments": {
+          "path": "/fixture/workspace/notes.md",
+          "edits": [
+            {
+              "oldText": "Sanitized old text.",
+              "newText": "Sanitized new text."
+            },
+            {
+              "oldText": "Sanitized old text.",
+              "newText": "Sanitized new text."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "deployed-apply_patch",
+      "source": {
+        "file": "fdb9a5af-e0c6-4924-98d4-56c00e96d90b.checkpoint.0a4858ef-5158-430a-8119-0d4f4eda2da4.jsonl",
+        "line": 561,
+        "timestamp": "2026-05-05T22:22:34.886Z",
+        "toolCallSha256": "04a74980dce8fcc22b5f179e34cb50cd7cb10744c586d7acdff877b6576c8adb",
+        "redactions": "IDs, paths, command and document text replaced; keys, scalar types and array cardinality preserved."
+      },
+      "observedShape": {
+        "type": "str",
+        "id": "str",
+        "name": "str",
+        "arguments": {
+          "input": "str"
+        }
+      },
+      "toolCall": {
+        "type": "toolCall",
+        "id": "sanitized-apply_patch",
+        "name": "apply_patch",
+        "arguments": {
+          "input": "*** Begin Patch\n*** Update File: /fixture/workspace/notes.md\n@@\n-old\n+new\n*** End Patch"
+        }
+      }
+    }
+  ]
+}

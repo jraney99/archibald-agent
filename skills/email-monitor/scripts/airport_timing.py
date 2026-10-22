@@ -13,6 +13,7 @@ straight through to compute_leave_time when it has one.
 """
 from __future__ import annotations
 
+import os
 import json
 from datetime import datetime
 from pathlib import Path
@@ -20,10 +21,10 @@ from typing import Optional
 
 from compute_leave_time import compute_leave_time, one_line_reason  # re-exported
 
-_CFG_FILE = Path("~/.openclaw/workspace/Skills/email-monitor/travel_config.json")
+_CFG_FILE = Path(os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/travel_config.json")).expanduser()
 # Machine-written overlay (log_flight.py owns it). Kept separate so the feedback
 # loop never has to rewrite the hand-formatted travel_config.json.
-LEARNED_FILE = Path("~/.openclaw/workspace/Skills/email-monitor/flight_learned.json")
+LEARNED_FILE = Path(os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/flight_learned.json")).expanduser()
 
 DEFAULT_WALK_MIN = 12
 DEFAULT_SECURITY_FALLBACK = {"default": {"p85": 18}, "early_am": {"p85": 25}}

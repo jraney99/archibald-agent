@@ -4,15 +4,16 @@ Skip a pending calendar title rename proposed by detect_bad_invites.py.
 Called by Archibald when the user taps ❌ (skip:calrename). Marks the event as
 seen so it isn't re-proposed on the next scan.
 """
+import os
 import json
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path("~/.openclaw/workspace/Skills/shared")))
+sys.path.insert(0, str(Path(os.path.expanduser("~/.openclaw/workspace/Skills/shared")).expanduser()))
 from pending_proposal import load_message_id, edit_or_fallback  # noqa: E402
 
-PENDING   = Path("~/.openclaw/pending_cal_rename.json")
-SEEN_FILE = Path("~/.openclaw/cal_rename_seen.json")
+PENDING   = Path(os.path.expanduser("~/.openclaw/pending_cal_rename.json")).expanduser()
+SEEN_FILE = Path(os.path.expanduser("~/.openclaw/cal_rename_seen.json")).expanduser()
 
 
 def main():

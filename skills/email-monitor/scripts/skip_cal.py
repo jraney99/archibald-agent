@@ -6,16 +6,17 @@ and, if another proposal was waiting behind it (see daemon.py's
 _publish_cal_proposal / confirm_cal_event.py's _promote_next_queued), promotes
 it into the now-empty slot so it isn't silently lost.
 """
+import os
 import json
 import sys
 from pathlib import Path
 
-sys.path.insert(0, "~/.openclaw/workspace/Skills/email-monitor/scripts")
-sys.path.insert(0, "~/.openclaw/workspace/Skills/shared")
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/email-monitor/scripts"))
+sys.path.insert(0, os.path.expanduser("~/.openclaw/workspace/Skills/shared"))
 from approval import require_cli, finish
 
-CAL_FILE       = Path("~/.openclaw/pending_cal_event.json")
-CAL_QUEUE_FILE = Path("~/.openclaw/pending_cal_queue.json")
+CAL_FILE       = Path(os.path.expanduser("~/.openclaw/pending_cal_event.json")).expanduser()
+CAL_QUEUE_FILE = Path(os.path.expanduser("~/.openclaw/pending_cal_queue.json")).expanduser()
 
 
 def _promote_next_queued() -> None:

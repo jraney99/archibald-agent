@@ -2330,7 +2330,7 @@ class TestStandingEmailRules(unittest.TestCase):
 
     def test_email_is_a_real_remember_topic(self):
         """remember.py has to accept --topic email or nothing can be tagged."""
-        text = Path("~/.openclaw/workspace/Skills/shared/remember.py").read_text()
+        text = Path(os.path.expanduser("~/.openclaw/workspace/Skills/shared/remember.py")).expanduser().read_text()
         self.assertIn('"email"', text.split("TOPICS = ")[1].split(")")[0])
 
 

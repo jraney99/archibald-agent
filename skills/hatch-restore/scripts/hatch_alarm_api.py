@@ -32,7 +32,7 @@ from typing import Any, Optional
 import requests
 
 API_URL = "https://data.hatchbaby.com/"
-OPENCLAW_JSON = Path("~/.openclaw/openclaw.json")
+OPENCLAW_JSON = Path(os.path.expanduser("~/.openclaw/openclaw.json")).expanduser()
 ALARM_ROUTINE_TYPE = "alarm"
 
 WEEKDAY_BITS: dict[str, int] = {
